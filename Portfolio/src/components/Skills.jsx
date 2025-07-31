@@ -12,6 +12,7 @@ import GitHub from '../assets/github.svg';
 import Firebase from '../assets/firebase.svg';
 import VSCode from '../assets/vscode.svg';
 import Postman from '../assets/postman.svg';
+import ReactNative from '../assets/reactjs.svg';
 
 export default function Skills() {
   const [activeCategory, setActiveCategory] = useState('technical');
@@ -22,7 +23,8 @@ export default function Skills() {
       { name: 'CSS', level: 90, icon: CSS, color: 'bg-blue-500' },
       { name: 'JavaScript', level: 90, icon: JavaScript, color: 'bg-yellow-500' },
       { name: 'Tailwind CSS', level: 92, icon: Tailwind, color: 'bg-cyan-600' },
-      { name: 'React', level: 95, icon: Reactjs, color: 'bg-cyan-500' },
+      { name: 'React', level: 85, icon: Reactjs, color: 'bg-cyan-500' },
+      {name: 'React Native', level: 85, icon: ReactNative, color: 'bg-blue-500' },
       { name: 'TypeScript', level: 85, icon: TypeScript, color: 'bg-blue-600' },
       { name: 'Firebase', level: 80, icon: Firebase, color: 'bg-yellow-500' },
       { name: 'Node.js', level: 88, icon: Nodejs, color: 'bg-green-500' },

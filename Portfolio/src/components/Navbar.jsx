@@ -182,15 +182,7 @@ export default function Navbar() {
               <hr className="my-4 border-gray-300 dark:border-gray-600" />
 
               {/* Dark Mode Toggle */}
-              <button
-                onClick={toggleDarkMode}
-                className="w-full flex items-center gap-3 px-2 py-2 rounded bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-              >
-                <i
-                  className={`ri-${darkMode ? 'sun' : 'moon'}-line text-lg text-gray-600 dark:text-gray-300`}
-                ></i>
-                <span className="text-gray-700 dark:text-gray-200">Toggle Theme</span>
-              </button>
+              
 
               {/* Hire Me Button */}
               <a

@@ -109,7 +109,8 @@ export default function Projects() {
     technologies: ["React Native", "JavaScript", "Firebase","Firebase cloud messaging", "AsyncStorage","CLI"],
     image: Project_9,
     liveUrl:"https://drive.google.com/uc?export=download&id=1nDNxRXu9WLZ7nl2b1ug7uXDB_VOX-CnL",
-    githubUrl: "https://github.com/Ankit1141192/SkillUp"
+    githubUrl: "https://github.com/Ankit1141192/SkillUp",
+    category: "mobile",
 
   }
 ];

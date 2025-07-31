@@ -1,4 +1,4 @@
-
+import photo from '../assets/Ankitpic1.png';
 export default function About() {
   const stats = [
     { number: '10+', label: 'Projects Built' },
@@ -44,7 +44,7 @@ export default function About() {
           <div className="relative">
             <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl">
               <img 
-                src="https://avatars.githubusercontent.com/u/173176604?v=4"
+                src={photo}
                 alt="About me"
                 className="w-full h-full object-cover object-top"
               />

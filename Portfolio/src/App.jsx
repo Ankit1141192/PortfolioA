@@ -9,6 +9,8 @@ import Projects from './components/Projects';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 
+
+
 // Create separate page components for routing
 function HomePage() {
   return (
@@ -44,6 +46,7 @@ function ContactPage() {
 }
 
 function App() {
+  
   return (
     <div className="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white min-h-screen">
       <Navbar />

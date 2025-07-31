@@ -7,6 +7,7 @@ import Project_5 from "../assets/Shopnetic.jpeg";
 import Project_6 from "../assets/portfolio-7.png";
 import Project_7 from "../assets/StopWatch2.jpg";
 import Project_8 from "../assets/ChargeGrid.jpg";
+import Project_9 from "../assets/Skillup.png";
 
 export default function Projects() {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -73,7 +74,7 @@ export default function Projects() {
     description: "A mobile-friendly online store with advanced features.",
     technologies: ["React Native", "JavaScript", "Expo", "FirebaseAuth", "AsyncStorage"],
     image: Project_5,
-    liveUrl: "#",
+    // liveUrl: "#",
     githubUrl: "https://github.com/Ankit1141192/ReactNativeProject",
     category: "mobile",
     featured: true,
@@ -84,7 +85,7 @@ export default function Projects() {
     description: "A simple stopwatch app built with React Native.",
     technologies: ["React Native", "JavaScript", "Expo", "AsyncStorage"],
     image: Project_7,
-    liveUrl: "#",
+    // liveUrl: "#",
     githubUrl: "https://github.com/Ankit1141192/StopWatch-Timer-App",
     category: "mobile",
     featured: false,
@@ -96,11 +97,21 @@ export default function Projects() {
       "ChargeGrid is a React Native CLI mobile application built to help electric vehicle (EV) users find distance between two points.",
     technologies: ["React Native", "JavaScript", "AsyncStorage", "CLI", "Map"],
     image: Project_8,
-    liveUrl: "#",
+    // liveUrl: "#",
     githubUrl: "https://github.com/Ankit1141192/ChargeGrid",
     category: "mobile",
     featured: false,
   },
+  {
+    id: 9,
+    title:"SkillUp",
+    description: "SkillUp is an engaging and user-friendly E-learning mobile application built using React Native.",
+    technologies: ["React Native", "JavaScript", "Firebase","Firebase cloud messaging", "AsyncStorage","CLI"],
+    image: Project_9,
+    liveUrl:"https://drive.google.com/uc?export=download&id=1nDNxRXu9WLZ7nl2b1ug7uXDB_VOX-CnL",
+    githubUrl: "https://github.com/Ankit1141192/SkillUp"
+
+  }
 ];
 
 
@@ -108,7 +119,7 @@ export default function Projects() {
     { id: 'all', label: 'All Projects' },
     { id: 'web', label: 'Web Apps' },
     { id: 'mobile', label: 'Mobile Apps' },
-    { id: 'design', label: 'Design' },
+
   ];
 
   const filteredProjects = activeFilter === 'all' 
@@ -159,6 +170,8 @@ export default function Projects() {
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-4">
                   <a
                     href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-12 h-12 flex items-center justify-center bg-white rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
                   >
                     <i className="ri-external-link-line text-gray-800 text-xl"></i>
@@ -226,7 +239,9 @@ export default function Projects() {
             Want to see more of my work? Check out my GitHub profile.
           </p>
           <a
-            href="#"
+            href="https://github.com/Ankit1141192"
+            target="_blank"
+            rel="noopener noreferrer"
             className="bg-gray-800 dark:bg-white text-white dark:text-gray-800 hover:bg-gray-900 dark:hover:bg-gray-100 px-8 py-3 rounded-full text-lg font-medium transition-colors cursor-pointer inline-flex items-center space-x-2 whitespace-nowrap"
           >
             <i className="ri-github-line text-xl"></i>

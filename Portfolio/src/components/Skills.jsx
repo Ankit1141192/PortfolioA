@@ -1,31 +1,44 @@
 import { useState } from 'react';
+import HTML from "../assets/html.svg";
+import CSS from "../assets/css.svg";
+import JavaScript from "../assets/javascript.svg";
+import Reactjs from '../assets/reactjs.svg';
+import Tailwind from '../assets/tailwind.svg';
+import TypeScript from '../assets/typescript.svg';
+import Nodejs from '../assets/nodejs.svg';
+import Express from '../assets/express.svg';
+import MongoDB from '../assets/mongodb.svg';
+import GitHub from '../assets/github.svg';
+import Firebase from '../assets/firebase.svg';
+import VSCode from '../assets/vscode.svg';
+import Postman from '../assets/postman.svg';
 
 export default function Skills() {
   const [activeCategory, setActiveCategory] = useState('technical');
 
   const skillCategories = {
     technical: [
-      { name: 'HTML', level: 95, icon: 'ri-html5-line', color: 'bg-orange-500' },
-      { name: 'CSS', level: 90, icon: 'ri-css3-line', color: 'bg-blue-500' },
-      { name: 'Tailwind CSS', level: 92, icon: 'ri-brush-line', color: 'bg-cyan-600' },
-      { name: 'React', level: 95, icon: 'ri-reactjs-line', color: 'bg-cyan-500' },
-      { name: 'React Native', level: 90, icon: 'ri-smartphone-line', color: 'bg-indigo-500' },
-      { name: 'TypeScript', level: 85, icon: 'ri-code-s-slash-line', color: 'bg-blue-600' },
-      { name: 'Firebase', level: 80, icon: 'ri-fire-line', color: 'bg-yellow-500' },
-      { name: 'Node.js', level: 88, icon: 'ri-nodejs-line', color: 'bg-green-500' },
-      { name: 'Express.js', level: 85, icon: 'ri-server-line', color: 'bg-gray-800' },
-      { name: 'MongoDB', level: 83, icon: 'ri-database-2-line', color: 'bg-green-600' },
+      { name: 'HTML', level: 95, icon: HTML, color: 'bg-orange-500' },
+      { name: 'CSS', level: 90, icon: CSS, color: 'bg-blue-500' },
+      { name: 'JavaScript', level: 90, icon: JavaScript, color: 'bg-yellow-500' },
+      { name: 'Tailwind CSS', level: 92, icon: Tailwind, color: 'bg-cyan-600' },
+      { name: 'React', level: 95, icon: Reactjs, color: 'bg-cyan-500' },
+      { name: 'TypeScript', level: 85, icon: TypeScript, color: 'bg-blue-600' },
+      { name: 'Firebase', level: 80, icon: Firebase, color: 'bg-yellow-500' },
+      { name: 'Node.js', level: 88, icon: Nodejs, color: 'bg-green-500' },
+      { name: 'Express.js', level: 85, icon: Express, color: 'bg-gray-800' },
+      { name: 'MongoDB', level: 83, icon: MongoDB, color: 'bg-green-600' },
     ],
     tools: [
-      { name: 'GitHub', level: 92, icon: 'ri-github-fill', color: 'bg-gray-700' },
-      { name: 'VS Code', level: 95, icon: 'ri-code-s-slash-line', color: 'bg-blue-600' },
-      { name: 'Postman', level: 88, icon: 'ri-send-plane-line', color: 'bg-orange-500' },
+      { name: 'GitHub', level: 92, icon: GitHub, color: 'bg-gray-700' },
+      { name: 'VS Code', level: 95, icon: VSCode, color: 'bg-blue-600' },
+      { name: 'Postman', level: 88, icon: Postman, color: 'bg-orange-500' },
     ],
   };
 
   const categories = [
-    { id: 'technical', label: 'Technical Skills', icon: 'ri-code-line' },
-    { id: 'tools', label: 'Tools', icon: 'ri-tools-line' },
+    { id: 'technical', label: 'Technical Skills' },
+    { id: 'tools', label: 'Tools' },
   ];
 
   return (
@@ -53,7 +66,6 @@ export default function Skills() {
                   : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
               }`}
             >
-              <i className={`${category.icon} text-lg`}></i>
               <span>{category.label}</span>
             </button>
           ))}
@@ -68,9 +80,13 @@ export default function Skills() {
             >
               <div className="flex items-center space-x-4 mb-4">
                 <div
-                  className={`w-12 h-12 flex items-center justify-center rounded-full ${skill.color} group-hover:scale-110 transition-transform duration-200`}
+                  className={`w-12 h-12 flex items-center justify-center rounded-full group-hover:scale-110 transition-transform duration-200`}
                 >
-                  <i className={`${skill.icon} text-xl text-white`}></i>
+                  <img
+                    src={skill.icon}
+                    alt={`${skill.name} icon`}
+                    className="w-8 h-8 object-contain"
+                  />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gray-800 dark:text-white">

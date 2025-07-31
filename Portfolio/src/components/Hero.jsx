@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import photo from '../assets/Ankitpic1.png';
 
 export default function Hero() {
   const [currentRole, setCurrentRole] = useState(0);
@@ -17,7 +18,7 @@ export default function Hero() {
         <div className="relative mb-8">
           <div className="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-white shadow-xl relative">
             <img
-              src="https://portfolio-ankitk114119.vercel.app/assets/Ankitpic1-Cgh-9aMZ.png"
+              src={photo}
               alt="Profile"
               className="w-full h-full object-cover object-top"
             />
@@ -50,7 +51,7 @@ export default function Hero() {
         <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-12">
           {/* Download CV */}
           <a
-            href="https://drive.google.com/file/d/1k9nnMbEITRUGn8xNQxyFbaYHfZ2IlUw_/view?usp=sharing"
+            href="https://drive.google.com/uc?export=download&id=1u12VQo7UlR_64m9-lU0Zc4DbgASlWDQS"
             target="_blank"
             rel="noopener noreferrer"
             download
@@ -86,17 +87,17 @@ export default function Hero() {
             },
             {
               icon: 'twitter',
-              href: '#',
+              href: 'https://x.com/ankitk09773',
               color: 'text-blue-500 hover:text-blue-600',
             },
             {
               icon: 'instagram',
-              href: '#',
+              href: 'https://www.instagram.com/mr__unique_ankitkumar4954/',
               color: 'text-pink-600 hover:text-pink-700',
             },
             {
               icon: 'dribbble',
-              href: '#',
+              href: 'https://portfolio-ankitk114119.vercel.app/',
               color: 'text-pink-500 hover:text-pink-600',
             },
           ].map((social) => (

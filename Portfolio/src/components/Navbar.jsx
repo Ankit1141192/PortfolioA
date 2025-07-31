@@ -112,14 +112,14 @@ export default function Navbar() {
 
           {/* Right: Desktop Toggle + Button */}
           <div className="hidden sm:flex items-center space-x-3">
-            <button
+            {/* <button
               onClick={toggleDarkMode}
               className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
             >
               <i
                 className={`ri-${darkMode ? 'sun' : 'moon'}-line text-lg text-gray-600 dark:text-gray-300`}
               ></i>
-            </button>
+            </button> */}
 
             <a
               href="https://drive.google.com/file/d/1k9nnMbEITRUGn8xNQxyFbaYHfZ2IlUw_/view?usp=sharing"

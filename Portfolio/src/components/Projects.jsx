@@ -6,7 +6,7 @@ import Project_4 from "../assets/LinkedinClone.png";
 import Project_5 from "../assets/Shopnetic.jpeg";
 import Project_6 from "../assets/portfolio-7.png";
 import Project_7 from "../assets/StopWatch2.jpg";
-import Project_8 from "../assets/ChargeGrid.jpg";
+import Project_8 from "../assets/ChargeGrid.png";
 import Project_9 from "../assets/Skillup.png";
 
 export default function Projects() {

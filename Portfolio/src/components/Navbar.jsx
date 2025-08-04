@@ -146,7 +146,7 @@ export default function Navbar() {
 
       {/* Mobile Slide-In Menu */}
       {menuOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex justify-end">
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex justify-end ">
           <div className="w-[70%] max-w-xs h-full bg-white dark:bg-gray-900 shadow-lg p-6 transition-all duration-300">
             <div className="flex justify-between items-center mb-6">
               <button 

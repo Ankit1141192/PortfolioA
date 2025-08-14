@@ -63,7 +63,7 @@ export default function Hero() {
 
           {/* View Portfolio */}
           <a
-            href="https://portfolio-ankitk114119.vercel.app/"
+            href="https://ankitkumar1141-portfolio.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
             className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-3 rounded-full text-lg font-medium transition-colors cursor-pointer whitespace-nowrap"
@@ -97,7 +97,7 @@ export default function Hero() {
             },
             {
               icon: 'dribbble',
-              href: 'https://portfolio-ankitk114119.vercel.app/',
+              href: 'https://ankitkumar1141-portfolio.vercel.app/',
               color: 'text-pink-500 hover:text-pink-600',
             },
           ].map((social) => (

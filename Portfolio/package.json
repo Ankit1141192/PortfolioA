@@ -12,6 +12,9 @@
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@tailwindcss/vite": "^4.1.11",
+    "add": "^2.0.6",
+    "button": "^1.1.1",
+    "card": "^2.5.4",
     "emailjs-com": "^3.2.0",
     "framer-motion": "^12.23.12",
     "lucide": "^0.534.0",
@@ -20,6 +23,7 @@
     "react-dom": "^19.1.0",
     "react-google-calendar-api": "^2.3.0",
     "react-router-dom": "^7.7.1",
+    "shadcn-ui": "^0.9.5",
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {

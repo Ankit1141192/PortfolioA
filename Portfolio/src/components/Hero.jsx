@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import photo from '../assets/Ankitpic1.png';
+import photo1 from "../assets/ankitk1.jpg";
 
 export default function Hero() {
   const [currentRole, setCurrentRole] = useState(0);
@@ -18,7 +19,7 @@ export default function Hero() {
         <div className="relative mb-8">
           <div className="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-white shadow-xl relative">
             <img
-              src={photo}
+              src={photo1}
               alt="Profile"
               className="w-full h-full object-cover object-top"
             />
@@ -35,7 +36,7 @@ export default function Hero() {
             Hello,
           </h1>
           <h2 className="text-4xl md:text-6xl font-bold text-gray-800 dark:text-white mb-4">
-            I'm <span className="text-blue-600 dark:text-blue-400">Ankit Kumar</span>
+            I'm <span className="text-purple-500 dark:text-blue-400">Ankit Kumar</span>
           </h2>
           <div className="h-8 mb-6">
             <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 transition-all duration-500">
@@ -62,14 +63,14 @@ export default function Hero() {
           </a>
 
           {/* View Portfolio */}
-          <a
+          {/* <a
             href="https://ankitkumar1141-portfolio.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
             className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-3 rounded-full text-lg font-medium transition-colors cursor-pointer whitespace-nowrap"
           >
             View Portfolio
-          </a>
+          </a> */}
         </div>
 
 
@@ -94,12 +95,8 @@ export default function Hero() {
               icon: 'instagram',
               href: 'https://www.instagram.com/mr__unique_ankitkumar4954/',
               color: 'text-pink-600 hover:text-pink-700',
-            },
-            {
-              icon: 'dribbble',
-              href: 'https://ankitkumar1141-portfolio.vercel.app/',
-              color: 'text-pink-500 hover:text-pink-600',
-            },
+            }
+          
           ].map((social) => (
             <a
               key={social.icon}

@@ -8,6 +8,8 @@ import Project_6 from "../assets/portfolio-7.png";
 import Project_7 from "../assets/StopWatch2.jpg";
 import Project_8 from "../assets/ChargeGrid.png";
 import Project_9 from "../assets/Skillup.png";
+import Project_10 from "../assets/Varnavelocity1.png";
+import Project_11 from "../assets/jeevaloop.png";
 
 export default function Projects() {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -112,7 +114,31 @@ export default function Projects() {
     githubUrl: "https://github.com/Ankit1141192/SkillUp",
     category: "mobile",
 
-  }
+  },
+ {
+    id: 10,
+    title: "Varnavelocity",
+    description: "Varnavelocity is a collaborative typing app that enhances speed, accuracy, and teamwork with secure auth and seamless data storage.",
+
+    technologies: ["React", "Clerk Auth", "Firebase", "LocalStorage", "Tailwindcss"],
+    image: Project_10,
+    liveUrl: "https://varnavelocity.vercel.app/",
+    githubUrl: "https://github.com/Ankit1141192/Varnavelocity",
+    category: "web",
+},
+
+  {
+    id: 11,
+    title: "Jeevaloop - Hospital Management System",
+    description: "Jeevaloop is a MERN Stack-based Hospital Management System designed to simplify hospital operations with role-based dashboards, secure authentication, and online appointment booking.",
+    technologies: ["React.js", "Tailwind CSS", "Node.js", "Express.js", "MongoDB", "JWT"],
+    image: Project_11, 
+    liveUrl: "https://jeevaloop.vercel.app/",
+    githubUrl: "https://github.com/Ankit1141192/Jeevaloop",
+    category: "web",
+},
+
+
 ];
 
 

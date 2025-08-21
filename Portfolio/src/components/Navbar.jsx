@@ -90,7 +90,7 @@ export default function Navbar() {
             onClick={() => handleNavigation('/', 'home')}
             className="text-2xl font-bold text-gray-800 font-[cursive] hover:scale-105 transition-transform"
           >
-            <span className="text-purple-500">&lt;Ankit Kumar/&gt;</span>
+            <span className="text-purple-500">Ankit Kumar</span>
           </button>
 
           {/* Center: Desktop Nav */}
@@ -153,7 +153,7 @@ export default function Navbar() {
                 onClick={() => handleNavigation('/', 'home')}
                 className="text-xl font-bold text-purple-500"
               >
-                &lt;Ankit/&gt;
+                Ankit
               </button>
               <button
                 onClick={() => setMenuOpen(false)}

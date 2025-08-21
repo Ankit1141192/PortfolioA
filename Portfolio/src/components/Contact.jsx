@@ -275,7 +275,7 @@ export default function Contact() {
                 { icon: 'github', href: 'https://github.com/Ankit1141192', color: 'hover:text-gray-800 dark:hover:text-gray-300' },
                 { icon: 'twitter', href: 'https://x.com/ankitk09773', color: 'hover:text-blue-500' },
                 { icon: 'instagram', href: 'https://www.instagram.com/mr__unique_ankitkumar4954/', color: 'hover:text-pink-600' },
-                { icon: 'dribbble', href: 'https://portfolio-ankitk114119.vercel.app/', color: 'hover:text-pink-500' },
+                
               ].map((social) => (
                 <a
                   key={social.icon}

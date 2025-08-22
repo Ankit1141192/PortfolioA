@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import photo from '../assets/Ankitpic1.png';
-import photo1 from "../assets/ankitk1.jpg";
+// import photo from '../assets/Ankit1.png';
+import photo1 from "../assets/ankitk2.jpg";
 
 export default function Hero() {
   const [currentRole, setCurrentRole] = useState(0);

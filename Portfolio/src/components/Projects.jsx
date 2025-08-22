@@ -205,6 +205,8 @@ export default function Projects() {
                   </a>
                   <a
                     href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-12 h-12 flex items-center justify-center bg-white rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
                   >
                     <i className="ri-github-line text-gray-800 text-xl"></i>
@@ -251,6 +253,8 @@ export default function Projects() {
                   </a>
                   <a
                     href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 py-2 px-4 rounded-lg text-sm font-medium transition-colors text-center cursor-pointer whitespace-nowrap"
                   >
                     View Code

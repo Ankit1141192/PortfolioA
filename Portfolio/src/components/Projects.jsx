@@ -15,138 +15,117 @@ export default function Projects() {
   const [activeFilter, setActiveFilter] = useState('all');
 
   const projects = [
-  {
-    id: 1,
-    title: "Todoist Clone",
-    description: "A productivity app to manage your tasks efficiently.",
-    technologies: ["HTML", "CSS", "JavaScript", "LocalStorage"],
-    image: Project_1,
-    liveUrl: "https://bright-cendol-1e0307.netlify.app",
-    githubUrl: "https://github.com/Ankit1141192/todoistConstructWeak",
-    category: "web",
-    featured: true,
-  },
-  {
-    id: 2,
-    title: "TraffIssue",
-    description: "A platform for citizens to report traffic problems.",
-    technologies: ["HTML", "CSS", "JavaScript", "LocalStorage"],
-    image: Project_2,
-    liveUrl: "https://4347-hackthon.netlify.app",
-    githubUrl: "https://github.com/Sadafff19/Team_4347_hackathon",
-    category: "web",
-    featured: false,
-  },
-  // {
-  //   id: 3,
-  //   title: "LinkedIn Clone",
-  //   description: "A social networking app inspired by LinkedIn.",
-  //   technologies: ["HTML", "JavaScript", "CSS", "LocalStorage"],
-  //   image: Project_4,
-  //   liveUrl: "#",
-  //   githubUrl: "https://github.com/Ankit1141192/cunstructWeakProject",
-  //   category: "web",
-  //   featured: false,
-  // },
-  {
-    id: 4,
-    title: "Stayver",
-    description: "A hotel booking platform with a user-friendly interface.",
-    technologies: ["React+Vite", "TailwindCSS", "ClerkAuth"],
-    image: Project_6,
-    liveUrl: "https://stayver.vercel.app/",
-    githubUrl: "https://github.com/Ankit1141192/QuickStay",
-    category: "web",
-    featured: true,
-  },
-  {
-    id: 5,
-    title: "Homorax",
-    description: "An ecommerce platform for modern shopping experiences.",
-    technologies: ["React", "CSS", "ChakraUI", "Firebase Authentication"],
-    image: Project_3,
-    liveUrl: "#",
-    githubUrl: "https://github.com/Ankit1141192/The-Coding-Crusaders",
-    category: "web",
-    featured: false,
-  },
-  {
-    id: 6,
-    title: "Shopnetic",
-    description: "A mobile-friendly online store with advanced features.",
-    technologies: ["React Native", "JavaScript", "Expo", "FirebaseAuth", "AsyncStorage"],
-    image: Project_5,
-    // liveUrl: "#",
-    githubUrl: "https://github.com/Ankit1141192/ReactNativeProject",
-    category: "mobile",
-    featured: true,
-  },
-  {
-    id: 7,
-    title: "StopWatch",
-    description: "A simple stopwatch app built with React Native.",
-    technologies: ["React Native", "JavaScript", "Expo", "AsyncStorage"],
-    image: Project_7,
-    // liveUrl: "#",
-    githubUrl: "https://github.com/Ankit1141192/StopWatch-Timer-App",
-    category: "mobile",
-    featured: false,
-  },
-  {
-    id: 8,
-    title: "ChargeGrid",
-    description:
-      "ChargeGrid is a React Native CLI mobile application built to help electric vehicle (EV) users find distance between two points.",
-    technologies: ["React Native", "JavaScript", "AsyncStorage", "CLI", "Map"],
-    image: Project_8,
-    // liveUrl: "#",
-    githubUrl: "https://github.com/Ankit1141192/ChargeGrid",
-    category: "mobile",
-    featured: false,
-  },
-  {
-    id: 9,
-    title:"SkillUp",
-    description: "SkillUp is an engaging and user-friendly E-learning mobile application built using React Native.",
-    technologies: ["React Native", "JavaScript", "Firebase","Firebase cloud messaging", "AsyncStorage","CLI"],
-    image: Project_9,
-    liveUrl:"https://drive.google.com/uc?export=download&id=1nDNxRXu9WLZ7nl2b1ug7uXDB_VOX-CnL",
-    githubUrl: "https://github.com/Ankit1141192/SkillUp",
-    category: "mobile",
-
-  },
- {
-    id: 10,
-    title: "Varnavelocity",
-    description: "Varnavelocity is a collaborative typing app that enhances speed, accuracy, and teamwork with secure auth and seamless data storage.",
-
-    technologies: ["React", "Clerk Auth", "Firebase", "LocalStorage", "Tailwindcss"],
-    image: Project_10,
-    liveUrl: "https://varnavelocity.vercel.app/",
-    githubUrl: "https://github.com/Ankit1141192/Varnavelocity",
-    category: "web",
-},
-
-  {
-    id: 11,
-    title: "Jeevaloop - Hospital Management System",
-    description: "Jeevaloop is a MERN Stack-based Hospital Management System designed to simplify hospital operations with role-based dashboards, secure authentication, and online appointment booking.",
-    technologies: ["React.js", "Tailwind CSS", "Node.js", "Express.js", "MongoDB", "JWT"],
-    image: Project_11, 
-    liveUrl: "https://jeevaloop.vercel.app/",
-    githubUrl: "https://github.com/Ankit1141192/Jeevaloop",
-    category: "web",
-},
-
-
-];
-
+    {
+      id: 1,
+      title: "Todoist Clone",
+      description: "A productivity app to manage your tasks efficiently.",
+      technologies: ["HTML", "CSS", "JavaScript", "LocalStorage"],
+      image: Project_1,
+      liveUrl: "https://bright-cendol-1e0307.netlify.app",
+      githubUrl: "https://github.com/Ankit1141192/todoistConstructWeak",
+      category: "web",
+      featured: true,
+    },
+    {
+      id: 2,
+      title: "TraffIssue",
+      description: "A platform for citizens to report traffic problems.",
+      technologies: ["HTML", "CSS", "JavaScript", "LocalStorage"],
+      image: Project_2,
+      liveUrl: "https://4347-hackthon.netlify.app",
+      githubUrl: "https://github.com/Sadafff19/Team_4347_hackathon",
+      category: "web",
+      featured: false,
+    },
+    {
+      id: 4,
+      title: "Stayver",
+      description: "A hotel booking platform with a user-friendly interface.",
+      technologies: ["React+Vite", "TailwindCSS", "ClerkAuth"],
+      image: Project_6,
+      liveUrl: "https://stayver.vercel.app/",
+      githubUrl: "https://github.com/Ankit1141192/QuickStay",
+      category: "web",
+      featured: true,
+    },
+    {
+      id: 5,
+      title: "Homorax",
+      description: "An ecommerce platform for modern shopping experiences.",
+      technologies: ["React", "CSS", "ChakraUI", "Firebase Authentication"],
+      image: Project_3,
+      liveUrl: "#",
+      githubUrl: "https://github.com/Ankit1141192/The-Coding-Crusaders",
+      category: "web",
+      featured: false,
+    },
+    {
+      id: 6,
+      title: "Shopnetic",
+      description: "A mobile-friendly online store with advanced features.",
+      technologies: ["React Native", "JavaScript", "Expo", "FirebaseAuth", "AsyncStorage"],
+      image: Project_5,
+      githubUrl: "https://github.com/Ankit1141192/ReactNativeProject",
+      category: "mobile",
+      featured: true,
+    },
+    {
+      id: 7,
+      title: "StopWatch",
+      description: "A simple stopwatch app built with React Native.",
+      technologies: ["React Native", "JavaScript", "Expo", "AsyncStorage"],
+      image: Project_7,
+      githubUrl: "https://github.com/Ankit1141192/StopWatch-Timer-App",
+      category: "mobile",
+      featured: false,
+    },
+    {
+      id: 8,
+      title: "ChargeGrid",
+      description:
+        "ChargeGrid is a React Native CLI mobile application built to help electric vehicle (EV) users find distance between two points.",
+      technologies: ["React Native", "JavaScript", "AsyncStorage", "CLI", "Map"],
+      image: Project_8,
+      githubUrl: "https://github.com/Ankit1141192/ChargeGrid",
+      category: "mobile",
+      featured: false,
+    },
+    {
+      id: 9,
+      title:"SkillUp",
+      description: "SkillUp is an engaging and user-friendly E-learning mobile application built using React Native.",
+      technologies: ["React Native", "JavaScript", "Firebase","Firebase cloud messaging", "AsyncStorage","CLI"],
+      image: Project_9,
+      liveUrl:"https://drive.google.com/uc?export=download&id=1nDNxRXu9WLZ7nl2b1ug7uXDB_VOX-CnL",
+      githubUrl: "https://github.com/Ankit1141192/SkillUp",
+      category: "mobile",
+    },
+    {
+      id: 10,
+      title: "Varnavelocity",
+      description: "Varnavelocity is a collaborative typing app that enhances speed, accuracy, and teamwork with secure auth and seamless data storage.",
+      technologies: ["React", "Clerk Auth", "Firebase", "LocalStorage", "Tailwindcss"],
+      image: Project_10,
+      liveUrl: "https://varnavelocity.vercel.app/",
+      githubUrl: "https://github.com/Ankit1141192/Varnavelocity",
+      category: "web",
+    },
+    {
+      id: 11,
+      title: "Jeevaloop - Hospital Management System",
+      description: "Jeevaloop is a MERN Stack-based Hospital Management System designed to simplify hospital operations with role-based dashboards, secure authentication, and online appointment booking.",
+      technologies: ["React.js", "Tailwind CSS", "Node.js", "Express.js", "MongoDB", "JWT"],
+      image: Project_11, 
+      liveUrl: "https://jeevaloop.vercel.app/",
+      githubUrl: "https://github.com/Ankit1141192/Jeevaloop",
+      category: "web",
+    },
+  ];
 
   const filters = [
     { id: 'all', label: 'All Projects' },
     { id: 'web', label: 'Web Apps' },
     { id: 'mobile', label: 'Mobile Apps' },
-
   ];
 
   const filteredProjects = activeFilter === 'all' 
@@ -166,6 +145,7 @@ export default function Projects() {
           </p>
         </div>
 
+        {/* Filters */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {filters.map((filter) => (
             <button
@@ -182,8 +162,9 @@ export default function Projects() {
           ))}
         </div>
 
+        {/* Projects Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project, index) => (
+          {filteredProjects.map((project) => (
             <div
               key={project.id}
               className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group"
@@ -195,14 +176,16 @@ export default function Projects() {
                   className="w-full h-48 object-cover object-top group-hover:scale-110 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-4">
-                  <a
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-12 h-12 flex items-center justify-center bg-white rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
-                  >
-                    <i className="ri-external-link-line text-gray-800 text-xl"></i>
-                  </a>
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-12 h-12 flex items-center justify-center bg-white rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
+                    >
+                      <i className="ri-external-link-line text-gray-800 text-xl"></i>
+                    </a>
+                  )}
                   <a
                     href={project.githubUrl}
                     target="_blank"
@@ -245,12 +228,16 @@ export default function Projects() {
                 </div>
 
                 <div className="flex space-x-3">
-                  <a
-                    href={project.liveUrl}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors text-center cursor-pointer whitespace-nowrap"
-                  >
-                    Live Demo
-                  </a>
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors text-center cursor-pointer whitespace-nowrap"
+                    >
+                      Live Demo
+                    </a>
+                  )}
                   <a
                     href={project.githubUrl}
                     target="_blank"
@@ -265,6 +252,7 @@ export default function Projects() {
           ))}
         </div>
 
+        {/* GitHub Profile Link */}
         <div className="text-center mt-12">
           <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
             Want to see more of my work? Check out my GitHub profile.

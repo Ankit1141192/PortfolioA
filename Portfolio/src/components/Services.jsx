@@ -80,14 +80,7 @@ export default function Services() {
           ))}
         </div>
 
-        <div className="text-center mt-12">
-          <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
-            Have a custom project in mind? Let's discuss your requirements.
-          </p>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full text-lg font-medium transition-colors cursor-pointer whitespace-nowrap">
-            Get Custom Quote
-          </button>
-        </div>
+        
       </div>
     </section>
   );

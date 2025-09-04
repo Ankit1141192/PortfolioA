@@ -1,5 +1,6 @@
 import photo from '../assets/Ankitpic1.png';
 import photo1 from "../assets/ankitk2.jpg";
+
 export default function About() {
   const stats = [
     { number: '10+', label: 'Projects Built' },
@@ -11,6 +12,7 @@ export default function About() {
   return (
     <section id="about" className="py-20 px-4">
       <div className="max-w-6xl mx-auto">
+        {/* Section Title */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4">
             About Me
@@ -18,7 +20,9 @@ export default function About() {
           <div className="w-20 h-1 bg-blue-600 mx-auto rounded-full"></div>
         </div>
 
+        {/* About Content */}
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+          {/* Text */}
           <div className="space-y-6">
             <h3 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">
               Aspiring Full Stack Developer
@@ -42,26 +46,26 @@ export default function About() {
             </div>
           </div>
 
-          <div className="relative">
-            <div className="aspect-square rounded-xl overflow-hidden shadow-xl">
+          {/* Image */}
+          <div className="relative flex justify-center">
+            <div className="rounded-xl overflow-hidden shadow-xl 
+              w-74 h-94 sm:w-72 sm:h-72 md:w-134 md:h-154 lg:w-110 lg:h-120">
               <img 
                 src={photo1}
                 alt="About me"
                 className="w-full h-full object-cover object-top"
               />
             </div>
-            {/* <div className="absolute -bottom-6 -right-6 bg-blue-600 text-white p-6 rounded-2xl shadow-xl">
-              <div className="text-center">
-                <div className="text-2xl font-bold">10+</div>
-                <div className="text-sm">Projects Completed</div>
-              </div>
-            </div> */}
           </div>
         </div>
 
+        {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map((stat, index) => (
-            <div key={index} className="text-center bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <div 
+              key={index} 
+              className="text-center bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+            >
               <div className="text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">
                 {stat.number}
               </div>

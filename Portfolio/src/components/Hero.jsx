@@ -17,17 +17,17 @@ export default function Hero() {
     <section id="home" className="min-h-screen flex items-center justify-center px-4 pt-20">
       <div className="text-center max-w-4xl mx-auto">
         <div className="relative mb-8">
-          <div className="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-white shadow-xl relative">
+          {/* <div className="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-white shadow-xl relative">
             <img
               src={photo1}
               alt="Profile"
               className="w-full h-full object-cover object-top"
             />
-            {/* ✅ Fixed green dot placement inside this relative block */}
+            
             <div className="absolute top-0 right-0 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
               <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
             </div>
-          </div>
+          </div> */}
         </div>
 
 

@@ -12,7 +12,7 @@ export default function Achievements() {
       title: "Generative AI",
       issuer: "Techgyan",
       date: "August 2025",
-      link: "https://media.licdn.com/dms/image/v2/D562DAQHPBDievRUpuQ/profile-treasury-image-shrink_800_800/B56Zi34wClHcAY-/0/1755431769801?e=1756375200&v=beta&t=0PAUSHOQiFQroRS7Ux4gP7xLWx6BMlbujeUyAj48f4w",
+      link: "https://media.licdn.com/dms/image/v2/D562DAQHPBDievRUpuQ/profile-treasury-image-shrink_800_800/B56Zi34wClHcAY-/0/1755431769801?e=1757602800&v=beta&t=H2Etc2ps8Norb6paM_Wqo8HNlRk3654ITB_5dnAfezY",
     },
     
   ];

@@ -48,7 +48,7 @@ export default function ScheduleModal({ isOpen, onClose }) {
   const fetchBookedSlots = async (date) => {
     if (!date) return;
     try {
-      const res = await fetch(`https://portfolioa-pabe.onrender.com/booked-slots?date=${date}`);
+      const res = await fetch(`https://portfolioa-1.onrender.com/booked-slots?date=${date}`);
       const data = await res.json();
       setBookedSlots(data.booked || []);
     } catch (err) {
@@ -62,7 +62,7 @@ export default function ScheduleModal({ isOpen, onClose }) {
     setSubmitStatus('');
 
     try {
-      const res = await fetch('https://portfolioa-pabe.onrender.com/schedule', {
+      const res = await fetch('https://portfolioa-1.onrender.com/schedule', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)

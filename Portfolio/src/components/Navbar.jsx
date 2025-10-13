@@ -82,7 +82,7 @@ export default function Navbar() {
   return (
     <>
       {/* Navbar */}
-      <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-[90%] max-w-6xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-full px-6 py-3 shadow-lg border border-gray-200/50 dark:border-gray-600/50">
+      <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-[90%] max-w-6xl bg-white/90 dark:bg-gray-800/80 backdrop-blur-md rounded-full px-6 py-3 shadow-lg border border-gray-200/50 dark:border-gray-600/50">
         <div className="flex items-center justify-between">
 
           {/* Left: Logo */}

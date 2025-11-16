@@ -274,7 +274,7 @@ export default function Contact() {
                 { icon: 'linkedin', href: 'https://www.linkedin.com/in/ankit1141/', color: 'hover:text-blue-700' },
                 { icon: 'github', href: 'https://github.com/Ankit1141192', color: 'hover:text-gray-800 dark:hover:text-gray-300' },
                 { icon: 'twitter', href: 'https://x.com/ankitk09773', color: 'hover:text-blue-500' },
-                { icon: 'instagram', href: 'https://www.instagram.com/mr__unique_ankitkumar4954/', color: 'hover:text-pink-600' },
+                { icon: 'instagram', href: 'https://www.instagram.com/mr_ankitkumar4954/', color: 'hover:text-pink-600' },
                 
               ].map((social) => (
                 <a

@@ -1,115 +1,106 @@
-import { useState, useEffect } from 'react';
-// import photo from '../assets/Ankit1.png';
-import photo1 from "../assets/ankitk2.jpg";
+import { useState, useEffect } from "react";
 
 export default function Hero() {
   const [currentRole, setCurrentRole] = useState(0);
-  const roles = ['Full Stack Developer', 'UI/UX Designer', 'Mobile App Developer', 'Tech Enthusiast'];
+
+  const roles = [
+    "Full Stack Developer",
+    "UI/UX Designer",
+    "Mobile App Developer",
+    "Tech Enthusiast",
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentRole((prev) => (prev + 1) % roles.length);
-    }, 3000);
+    }, 2500);
     return () => clearInterval(interval);
-  }, [roles.length]);
+  }, []);
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center px-4 pt-20">
-      <div className="text-center max-w-4xl mx-auto">
-        <div className="relative mb-8">
-          {/* <div className="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-white shadow-xl relative">
-            <img
-              src={photo1}
-              alt="Profile"
-              className="w-full h-full object-cover object-top"
-            />
-            
-            <div className="absolute top-0 right-0 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
-              <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-            </div>
-          </div> */}
+    <section
+      id="home"
+      className="min-h-screen flex items-center justify-center px-4 pt-20"
+    >
+      <div className="text-center max-w-3xl mx-auto">
+
+        {/* Greeting */}
+        <h1 className="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-2">
+          Hello,
+        </h1>
+
+        {/* Name */}
+        <h2 className="text-4xl md:text-6xl font-extrabold text-gray-900 dark:text-white mb-3">
+          I'm{" "}
+          <span className="text-purple-600 dark:text-purple-400">
+            Ankit Kumar
+          </span>
+        </h2>
+
+        {/* Role Animation */}
+        <div className="h-8 mb-6">
+          <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 font-medium transition-all duration-500">
+            {roles[currentRole]}
+          </p>
         </div>
 
-
-        <div className="mb-6">
-          <h1 className="text-xl font-medium text-gray-600 dark:text-gray-300 mb-2">
-            Hello,
-          </h1>
-          <h2 className="text-4xl md:text-6xl font-bold text-gray-800 dark:text-white mb-4">
-            I'm <span className="text-purple-500 dark:text-blue-400">Ankit Kumar</span>
-          </h2>
-          <div className="h-8 mb-6">
-            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 transition-all duration-500">
-              {roles[currentRole]}
-            </p>
-          </div>
-        </div>
-
-        <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-          I craft digital experiences that blend creativity with functionality. From responsive web applications to intuitive mobile apps, I bring ideas to life through clean code and thoughtful design.
+        {/* Description */}
+        <p className="text-lg text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+          I craft digital experiences that blend creativity with functionality.
+          From responsive web applications to intuitive mobile designs, I bring
+          ideas to life through clean code and thoughtful UI/UX decisions.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-12">
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+
           {/* Download CV */}
           <a
             href="https://drive.google.com/uc?export=download&id=1u12VQo7UlR_64m9-lU0Zc4DbgASlWDQS"
             target="_blank"
             rel="noopener noreferrer"
-            download
-            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full text-lg font-medium transition-colors cursor-pointer flex items-center space-x-2 whitespace-nowrap"
+            className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-full text-lg font-medium transition-all duration-300 shadow-md hover:shadow-xl hover:scale-[1.03] flex items-center gap-2"
           >
             <span>Download CV</span>
-            <i className="ri-download-line"></i>
+            <i className="ri-download-line text-xl"></i>
           </a>
-
-          {/* View Portfolio */}
-          {/* <a
-            href="https://ankitkumar1141-portfolio.vercel.app/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-3 rounded-full text-lg font-medium transition-colors cursor-pointer whitespace-nowrap"
-          >
-            View Portfolio
-          </a> */}
         </div>
 
-
-        <div className="flex items-center justify-center space-x-6">
+        {/* Social Icons */}
+        <div className="flex items-center justify-center gap-6">
           {[
             {
-              icon: 'linkedin',
-              href: 'https://www.linkedin.com/in/ankit1141/',
-              color: 'text-blue-700 hover:text-blue-800',
+              icon: "linkedin",
+              href: "https://www.linkedin.com/in/ankit1141/",
             },
             {
-              icon: 'github',
-              href: 'https://github.com/Ankit1141192',
-              color: 'text-gray-800 hover:text-gray-900 dark:text-white dark:hover:text-gray-300',
+              icon: "github",
+              href: "https://github.com/Ankit1141192",
             },
             {
-              icon: 'twitter',
-              href: 'https://x.com/ankitk09773',
-              color: 'text-blue-500 hover:text-blue-600',
+              icon: "twitter",
+              href: "https://x.com/ankitk09773",
             },
             {
-              icon: 'instagram',
-              href: 'https://www.instagram.com/mr__unique_ankitkumar4954/',
-              color: 'text-pink-600 hover:text-pink-700',
-            }
-          
+              icon: "instagram",
+              href: "https://www.instagram.com/mr_ankitkumar4954/",
+            },
           ].map((social) => (
             <a
               key={social.icon}
               href={social.href}
               target="_blank"
               rel="noopener noreferrer"
-              className={`w-12 h-12 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer ${social.color}`}
+              className="w-12 h-12 flex items-center justify-center rounded-full bg-white/50 dark:bg-gray-700/50 backdrop-blur-md shadow-md hover:shadow-xl hover:scale-110 transition-all duration-300"
             >
-              <i className={`ri-${social.icon}-${social.icon === 'github' ? 'fill' : 'line'} text-xl`}></i>
+              <i
+                className={`ri-${social.icon}-${
+                  social.icon === "github" ? "fill" : "line"
+                } text-2xl text-gray-800 dark:text-white`}
+              ></i>
             </a>
           ))}
         </div>
-
       </div>
     </section>
   );

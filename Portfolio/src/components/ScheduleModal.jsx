@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { backendApi } from '../config/api';
 
 export default function ScheduleModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
@@ -32,23 +33,38 @@ export default function ScheduleModal({ isOpen, onClose }) {
     'Asia/Dubai','Asia/Singapore'
   ];
 
+  // -------------------------------
+  // Handle input
+  // -------------------------------
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
 
-    // Fetch booked slots when date changes
-    if (e.target.name === 'date') fetchBookedSlots(e.target.value);
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+
+    if (name === 'date') {
+      setFormData(prev => ({ ...prev, time: '' }));
+      fetchBookedSlots(value);
+    }
   };
 
+  // -------------------------------
+  // Minimum date (today)
+  // -------------------------------
   const getMinDate = () => {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate());
-    return tomorrow.toISOString().split('T')[0];
+    const today = new Date();
+    return today.toISOString().split('T')[0];
   };
 
+  // -------------------------------
+  // Fetch booked slots
+  // -------------------------------
   const fetchBookedSlots = async (date) => {
     if (!date) return;
     try {
-      const res = await fetch(`https://portfolioa-1.onrender.com/booked-slots?date=${date}`);
+      const res = await fetch(`${backendApi}/booked-slots?date=${date}`);
       const data = await res.json();
       setBookedSlots(data.booked || []);
     } catch (err) {
@@ -56,13 +72,40 @@ export default function ScheduleModal({ isOpen, onClose }) {
     }
   };
 
+  // -------------------------------
+  // TIME SLOT FILTERING FOR TODAY
+  // -------------------------------
+  const getFilteredSlots = () => {
+    if (!formData.date) return timeSlots;
+
+    const selectedDate = new Date(formData.date);
+    const today = new Date();
+
+    // Not today → return all slots
+    if (selectedDate.toDateString() !== today.toDateString()) {
+      return timeSlots;
+    }
+
+    // If today → remove past slots + 30 min buffer
+    const currentTime = new Date();
+    currentTime.setMinutes(currentTime.getMinutes() + 30);
+
+    return timeSlots.filter(slot => {
+      const slotTime = new Date(formData.date + " " + slot);
+      return slotTime >= currentTime;
+    });
+  };
+
+  // -------------------------------
+  // Submit
+  // -------------------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus('');
 
     try {
-      const res = await fetch('https://portfolioa-1.onrender.com/schedule', {
+      const res = await fetch(`${backendApi}/schedule`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -72,8 +115,19 @@ export default function ScheduleModal({ isOpen, onClose }) {
       if (!res.ok) throw new Error(data.error || "Failed");
 
       alert('Meeting scheduled successfully!');
-      setFormData({ name:'', email:'', date:'', time:'', timezone:'Asia/Kolkata', purpose:'', message:'' });
+
+      setFormData({
+        name: '',
+        email: '',
+        date: '',
+        time: '',
+        timezone: 'Asia/Kolkata',
+        purpose: '',
+        message: ''
+      });
+
       setBookedSlots(prev => [...prev, formData.time]);
+
       setSubmitStatus('success');
       onClose();
     } catch (err) {
@@ -90,87 +144,90 @@ export default function ScheduleModal({ isOpen, onClose }) {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
       <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Schedule a Call</h2>
-          <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer">
+          <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
             <i className="ri-close-line text-xl text-gray-600 dark:text-gray-400"></i>
           </button>
         </div>
 
-        {/* Success/Error Messages */}
+        {/* Success */}
         {submitStatus === 'success' && (
           <div className="mb-6 p-4 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 rounded-lg">
-            <div className="flex items-center space-x-2">
-              <i className="ri-check-circle-line text-xl"></i>
-              <span>Meeting scheduled successfully! Check your email for confirmation.</span>
-            </div>
+            <i className="ri-check-circle-line text-xl mr-2"></i>
+            Meeting scheduled successfully! Check your email for confirmation.
           </div>
         )}
+
+        {/* Error */}
         {submitStatus === 'error' && (
           <div className="mb-6 p-4 bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200 rounded-lg">
-            <div className="flex items-center space-x-2">
-              <i className="ri-error-warning-line text-xl"></i>
-              <span>Error scheduling meeting. Please try again.</span>
-            </div>
+            <i className="ri-error-warning-line text-xl mr-2"></i>
+            Error scheduling meeting. Please try again.
           </div>
         )}
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-          {/* Name & Email */}
+
+          {/* Name + Email */}
           <div className="grid sm:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Full Name *</label>
+              <label className="block mb-2 text-sm font-medium">Full Name *</label>
               <input
                 type="text"
                 name="name"
+                required
                 value={formData.name}
                 onChange={handleInputChange}
-                required
                 placeholder="Your Full Name"
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                className="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 text-sm"
               />
             </div>
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address *</label>
+              <label className="block mb-2 text-sm font-medium">Email *</label>
               <input
                 type="email"
                 name="email"
+                required
                 value={formData.email}
                 onChange={handleInputChange}
-                required
                 placeholder="you@example.com"
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                className="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 text-sm"
               />
             </div>
           </div>
 
-          {/* Date & Time */}
+          {/* Date + Time */}
           <div className="grid sm:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Preferred Date *</label>
+              <label className="block mb-2 text-sm font-medium">Preferred Date *</label>
               <input
                 type="date"
                 name="date"
-                value={formData.date}
-                onChange={handleInputChange}
-                min={getMinDate()}
                 required
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                value={formData.date}
+                min={getMinDate()}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 text-sm"
               />
             </div>
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Preferred Time *</label>
+              <label className="block mb-2 text-sm font-medium">Preferred Time *</label>
               <select
                 name="time"
+                required
                 value={formData.time}
                 onChange={handleInputChange}
-                required
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm cursor-pointer"
+                className="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 cursor-pointer text-sm"
               >
                 <option value="">Select Time</option>
-                {timeSlots.map(slot => (
+
+                {getFilteredSlots().map(slot => (
                   <option key={slot} value={slot} disabled={bookedSlots.includes(slot)}>
                     {slot} {bookedSlots.includes(slot) ? "(Booked)" : ""}
                   </option>
@@ -179,48 +236,54 @@ export default function ScheduleModal({ isOpen, onClose }) {
             </div>
           </div>
 
-          {/* Timezone & Purpose */}
+          {/* Timezone + Purpose */}
           <div className="grid sm:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Timezone *</label>
+              <label className="block mb-2 text-sm font-medium">Timezone *</label>
               <select
                 name="timezone"
                 value={formData.timezone}
                 onChange={handleInputChange}
-                required
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm cursor-pointer"
+                className="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 cursor-pointer text-sm"
               >
-                {timezones.map(tz => <option key={tz} value={tz}>{tz.replace(/_/g, ' ')}</option>)}
+                {timezones.map(tz => (
+                  <option key={tz} value={tz}>{tz.replace(/_/g, ' ')}</option>
+                ))}
               </select>
             </div>
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Meeting Purpose *</label>
+              <label className="block mb-2 text-sm font-medium">Meeting Purpose *</label>
               <select
                 name="purpose"
+                required
                 value={formData.purpose}
                 onChange={handleInputChange}
-                required
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm cursor-pointer"
+                className="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 cursor-pointer text-sm"
               >
                 <option value="">Select Purpose</option>
-                {purposes.map(p => <option key={p} value={p}>{p}</option>)}
+                {purposes.map(p => (
+                  <option key={p} value={p}>{p}</option>
+                ))}
               </select>
             </div>
           </div>
 
           {/* Message */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Additional Message</label>
+            <label className="block mb-2 text-sm font-medium">Additional Message</label>
             <textarea
               name="message"
+              rows={4}
+              maxLength={500}
               value={formData.message}
               onChange={handleInputChange}
-              maxLength={500}
-              rows={4}
-              placeholder="Tell me more about your project or topics you'd like to discuss..."
-              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm resize-none"
+              placeholder="Tell me more about your project..."
+              className="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 resize-none text-sm"
             />
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{formData.message.length}/500 characters</p>
+            <p className="text-xs text-gray-500 mt-1">
+              {formData.message.length}/500 characters
+            </p>
           </div>
 
           {/* Buttons */}
@@ -229,14 +292,15 @@ export default function ScheduleModal({ isOpen, onClose }) {
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="flex-1 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer whitespace-nowrap"
+              className="flex-1 py-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
             >
               Cancel
             </button>
+
             <button
               type="submit"
-              disabled={isSubmitting || formData.message.length > 500}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 px-6 rounded-lg font-medium transition-colors cursor-pointer whitespace-nowrap flex items-center justify-center space-x-2"
+              disabled={isSubmitting}
+              className="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 flex items-center justify-center space-x-2"
             >
               {isSubmitting ? (
                 <>
@@ -251,6 +315,7 @@ export default function ScheduleModal({ isOpen, onClose }) {
               )}
             </button>
           </div>
+
         </form>
       </div>
     </div>

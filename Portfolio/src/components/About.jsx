@@ -1,5 +1,4 @@
-import photo from "../assets/Ankitpic1.png";
-import photo1 from "../assets/ankitk2.jpg";
+import photo1 from "../assets/profile.png";
 
 export default function About() {
   const stats = [
@@ -12,6 +11,7 @@ export default function About() {
   return (
     <section id="about" className="py-20 px-4">
       <div className="max-w-6xl mx-auto">
+
         {/* Section Title */}
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4">
@@ -22,24 +22,20 @@ export default function About() {
 
         {/* About Content */}
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+
           {/* Text */}
           <div className="space-y-6">
             <h3 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">
               Aspiring Full Stack Developer
             </h3>
+
             <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-              I'm a passionate and curious software developer specializing in
-              the MERN stack, with hands-on experience in building real-world
-              web and mobile applications. Though I'm a fresher, I’ve worked on
-              10+ projects that showcase my ability to design, develop, and
-              deploy scalable and responsive applications.
+              I'm a MERN Stack Developer with hands-on experience building real-world web
+              and mobile applications. I’ve completed 10+ projects, participated in
+              hackathons, and constantly improve my skills through practical learning.
+              I enjoy creating clean, scalable apps and I'm open to new opportunities.
             </p>
-            <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-              My strengths lie in JavaScript, React.js, React Native, and
-              Firebase. I’ve also participated in multiple hackathons and take
-              pride in continuously improving my skills, collaborating with
-              teams, and embracing new challenges.
-            </p>
+
             <div className="flex flex-wrap gap-4">
               <div className="bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow-md">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -61,7 +57,7 @@ export default function About() {
 
           {/* Image */}
           <div className="relative flex justify-center">
-            <div className="rounded-xl overflow-hidden shadow-xl w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96">
+            <div className="rounded-xl overflow-hidden shadow-xl w-55 h-55 sm:w-100 sm:h-100 md:w-80 md:h-80 lg:w-96 lg:h-96">
               <img
                 src={photo1}
                 alt="About me"
@@ -87,6 +83,7 @@ export default function About() {
             </div>
           ))}
         </div>
+
       </div>
     </section>
   );

@@ -1,1 +1,1 @@
-export const backendApi = "https://portfolioa-2.onrender.com"
+export const backendApi = "http://localhost:5000"

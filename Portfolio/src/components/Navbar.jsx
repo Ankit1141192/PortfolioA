@@ -86,7 +86,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between">
 
           {/* Left: Logo */}
-          <button 
+          <button
             onClick={() => handleNavigation('/', 'home')}
             className="text-2xl font-bold text-gray-800 font-[cursive] hover:scale-105 transition-transform"
           >
@@ -99,11 +99,10 @@ export default function Navbar() {
               <button
                 key={item.id}
                 onClick={() => handleNavigation(item.path, item.id)}
-                className={`text-sm font-medium transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400 ${
-                  isActive(item.id)
+                className={`text-sm font-medium transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400 ${isActive(item.id)
                     ? 'text-blue-600 dark:text-blue-400'
                     : 'text-gray-600 dark:text-gray-300'
-                }`}
+                  }`}
               >
                 {item.label}
               </button>
@@ -112,14 +111,15 @@ export default function Navbar() {
 
           {/* Right: Desktop Toggle + Button */}
           <div className="hidden sm:flex items-center space-x-3">
-            {/* <button
+            <button
               onClick={toggleDarkMode}
-              className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300 hover:scale-110"
+              aria-label="Toggle theme"
             >
               <i
                 className={`ri-${darkMode ? 'sun' : 'moon'}-line text-lg text-gray-600 dark:text-gray-300`}
               ></i>
-            </button> */}
+            </button>
 
             <a
               href="https://drive.google.com/file/d/1hL47ppIqoRxjsb8JzUFwmLmRYi4k1rKm/view?usp=sharing"
@@ -149,7 +149,7 @@ export default function Navbar() {
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex justify-end ">
           <div className="w-[70%] max-w-xs h-full bg-white dark:bg-gray-900 shadow-lg p-6 transition-all duration-300">
             <div className="flex justify-between items-center mb-6">
-              <button 
+              <button
                 onClick={() => handleNavigation('/', 'home')}
                 className="text-xl font-bold text-purple-500"
               >
@@ -168,11 +168,10 @@ export default function Navbar() {
                 <button
                   key={item.id}
                   onClick={() => handleNavigation(item.path, item.id)}
-                  className={`block w-full text-left px-2 py-2 rounded hover:bg-blue-100 dark:hover:bg-gray-700 transition ${
-                    isActive(item.id)
+                  className={`block w-full text-left px-2 py-2 rounded hover:bg-blue-100 dark:hover:bg-gray-700 transition ${isActive(item.id)
                       ? 'text-blue-600 dark:text-blue-400'
                       : 'text-gray-600 dark:text-gray-300'
-                  }`}
+                    }`}
                 >
                   {item.label}
                 </button>
@@ -182,7 +181,17 @@ export default function Navbar() {
               <hr className="my-4 border-gray-300 dark:border-gray-600" />
 
               {/* Dark Mode Toggle */}
-              
+              <button
+                onClick={toggleDarkMode}
+                className="w-full flex items-center justify-between px-2 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              >
+                <span className="text-gray-700 dark:text-gray-300 font-medium">
+                  {darkMode ? 'Light Mode' : 'Dark Mode'}
+                </span>
+                <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
+                  <i className={`ri-${darkMode ? 'sun' : 'moon'}-line text-lg text-gray-600 dark:text-gray-300`}></i>
+                </div>
+              </button>
 
               {/* Hire Me Button */}
               <a

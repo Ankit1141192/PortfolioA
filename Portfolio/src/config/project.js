@@ -11,6 +11,7 @@ import Project_10 from "../assets/Varnavelocity1.png";
 import Project_11 from "../assets/jeevaloop.png";
 import Project_12 from "../assets/vibesync.png"
 import Project_13 from "../assets/boundDesk.png";
+import Project_14 from "../assets/valdio.png";
 
 export const projects = [
     {
@@ -160,6 +161,29 @@ export const projects = [
         liveUrl: "https://bound-desk.vercel.app",
         githubUrl: "https://github.com/Ankit1141192/BoundDesk",
         category: "web"
-    }
+    },
+    {
+    id: 14,
+    title: "Valdio",
+    description:
+        "Valdio is a full-stack e-commerce application built with the MERN stack, offering a modern, responsive shopping experience with dynamic product listings, cart management, and a scalable backend architecture.",
+    technologies: [
+        "React.js",
+        "Vite",
+        "Tailwind CSS",
+        "Material UI",
+        "Framer Motion",
+        "Node.js",
+        "Express.js",
+        "MongoDB",
+        "Mongoose",
+        "JWT"
+    ],
+    image: Project_14,
+    liveUrl: "https://valdio.in/",
+    githubUrl: "https://github.com/Ankit1141192/Valdio",
+    category: "web"
+}
+
 
 ];

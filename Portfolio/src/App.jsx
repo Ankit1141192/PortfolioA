@@ -9,6 +9,7 @@ import Projects from './components/Projects';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Achievements from './components/Achievements';
+import Chatbot from './components/Chatbot';
 
 
 
@@ -20,11 +21,11 @@ function HomePage() {
       <Hero />
 
       <About />
-     
+
       <Skills />
       <Services />
       <Projects />
-      <Achievements/>
+      <Achievements />
       <Contact />
     </>
   );
@@ -51,7 +52,7 @@ function ContactPage() {
 }
 
 function App() {
-  
+
   return (
     <div className="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white min-h-screen">
       <Navbar />
@@ -64,6 +65,7 @@ function App() {
         <Route path="/contact" element={<ContactPage />} />
       </Routes>
       <Footer />
+      <Chatbot />
     </div>
   );
 }

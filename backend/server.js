@@ -148,8 +148,8 @@ app.post("/api/send-email", upload.single("resume"), async (req, res) => {
     return res.status(400).json({ error: "Missing required position or message fields." });
   }
 
-  if (applicationType === 'Email' && (!applicantEmail || !hrEmail || !resume)) {
-    return res.status(400).json({ error: "Applicant/HR emails and resume file are required for Email applications." });
+  if (applicationType === 'Email' && (!applicantEmail || !hrEmail)) {
+    return res.status(400).json({ error: "Applicant and HR emails are required for Email applications." });
   }
 
   if (applicationType === 'WhatsApp' && !hrPhone) {
@@ -202,8 +202,8 @@ app.post("/api/send-email", upload.single("resume"), async (req, res) => {
         text: message,
         attachments: [
           {
-            filename: resume.originalname,
-            content: resume.buffer,
+            filename: resumeName,
+            ...(resume ? { content: resume.buffer } : { path: resumeUrl })
           },
         ],
       };

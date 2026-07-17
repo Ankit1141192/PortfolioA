@@ -62,6 +62,7 @@ export default function AppliedJobs() {
     applicationType: 'Email' // 'Email' | 'WhatsApp'
   });
   const [resume, setResume] = useState(null);
+  const [resumeSource, setResumeSource] = useState('default'); // 'default' | 'custom'
   const [resumeError, setResumeError] = useState('');
   const [showEmailPreview, setShowEmailPreview] = useState(true);
   const [formStatus, setFormStatus] = useState({ type: '', message: '' });
@@ -162,8 +163,8 @@ export default function AppliedJobs() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    if (!resume && formData.applicationType === 'Email') {
-      setResumeError('Resume file is required for Email applications.');
+    if (resumeSource === 'custom' && !resume) {
+      setResumeError('Please select a custom resume file to upload.');
       return;
     }
 
@@ -183,7 +184,7 @@ export default function AppliedJobs() {
     submissionData.append('jobUrl', formData.jobUrl);
     submissionData.append('position', jobTemplates[formData.position].label);
     submissionData.append('message', formData.message);
-    if (resume) {
+    if (resumeSource === 'custom' && resume) {
       submissionData.append('resume', resume);
     }
     submissionData.append('applicationType', formData.applicationType);
@@ -231,6 +232,7 @@ export default function AppliedJobs() {
           message: jobTemplates[prev.position]?.body || ''
         }));
         setResume(null);
+        setResumeSource('default');
         fetchApplications();
         // Switch to history tab after short delay
         setTimeout(() => {
@@ -1020,20 +1022,76 @@ export default function AppliedJobs() {
 
                 </div>
 
-                {/* Resume File Upload */}
+                {/* Resume Source Selector */}
                 <div>
-                  <label className={`block mb-1.5 text-[10px] font-bold uppercase tracking-wider font-mono ${labelColor}`}>
-                    Attach Resume {formData.applicationType === 'Email' ? '(Required)' : '(Optional - defaults to portfolio resume)'}
-                  </label>
-                  <div className={`relative border border-dashed rounded-2xl p-6 transition flex flex-col items-center justify-center cursor-pointer group bg-slate-950/10 ${
-                    localDarkMode ? 'border-slate-800 hover:border-slate-700' : 'border-slate-200 hover:border-slate-400'
-                  }`}>
-                    <input
-                      type="file"
-                      accept=".pdf,.doc,.docx"
-                      onChange={handleFileChange}
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                    />
+                  <label className={`block mb-2 text-[10px] font-bold uppercase tracking-wider font-mono ${labelColor}`}>RESUME DOCUMENT PIPELINE</label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setResumeSource('default');
+                        setResume(null);
+                        setResumeError('');
+                      }}
+                      className={`py-3 rounded-xl border font-bold text-xs flex items-center justify-center space-x-2 transition cursor-pointer ${
+                        resumeSource === 'default'
+                          ? 'bg-indigo-500/10 border-indigo-500 text-indigo-650 dark:text-indigo-400 font-bold'
+                          : `${localDarkMode ? 'border-slate-800 bg-slate-950/40 text-slate-400' : 'border-slate-200 bg-white text-slate-600'} hover:text-indigo-500`
+                      }`}
+                    >
+                      <span>Default Portfolio CV</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setResumeSource('custom')}
+                      className={`py-3 rounded-xl border font-bold text-xs flex items-center justify-center space-x-2 transition cursor-pointer ${
+                        resumeSource === 'custom'
+                          ? 'bg-indigo-500/10 border-indigo-500 text-indigo-650 dark:text-indigo-400 font-bold'
+                          : `${localDarkMode ? 'border-slate-800 bg-slate-950/40 text-slate-400' : 'border-slate-200 bg-white text-slate-600'} hover:text-indigo-500`
+                      }`}
+                    >
+                      <span>Upload Custom File</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Resume File Upload / Info */}
+                <div>
+                  {resumeSource === 'default' ? (
+                    <div className={`p-4 rounded-xl border flex items-center justify-between font-mono text-[10.5px] ${
+                      localDarkMode ? 'bg-slate-900/40 border-slate-900 text-slate-350' : 'bg-slate-50 border-slate-200 text-slate-600'
+                    }`}>
+                      <div className="flex items-center space-x-2.5">
+                        <FileCheck className="w-5 h-5 text-indigo-500" />
+                        <div>
+                          <span className="font-bold text-indigo-600 dark:text-indigo-400">Using Default Ankit_CV.pdf</span>
+                          <span className="block text-[9.5px] text-slate-500">Google Drive Linked File</span>
+                        </div>
+                      </div>
+                      <a 
+                        href="https://drive.google.com/uc?export=download&id=1u12VQo7UlR_64m9-lU0Zc4DbgASlWDQS"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-indigo-500 hover:underline flex items-center space-x-1"
+                      >
+                        <span>Preview</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+                  ) : (
+                    <div className="animate-fadeIn">
+                      <label className={`block mb-1.5 text-[10px] font-bold uppercase tracking-wider font-mono ${labelColor}`}>
+                        Attach Custom Resume File
+                      </label>
+                      <div className={`relative border border-dashed rounded-2xl p-6 transition flex flex-col items-center justify-center cursor-pointer group bg-slate-950/10 ${
+                        localDarkMode ? 'border-slate-800 hover:border-slate-700' : 'border-slate-200 hover:border-slate-400'
+                      }`}>
+                        <input
+                          type="file"
+                          accept=".pdf,.doc,.docx"
+                          onChange={handleFileChange}
+                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        />
                     <FileText className="w-8 h-8 text-slate-500 group-hover:text-indigo-400 transition-colors mb-2" />
                     <span className="text-xs font-bold text-slate-400 dark:text-slate-300">
                       {resume ? resume.name : 'Click to select or drag resume file'}
@@ -1044,6 +1102,8 @@ export default function AppliedJobs() {
                     <p className="text-[11px] text-rose-500 font-bold mt-1.5 font-mono">{resumeError}</p>
                   )}
                 </div>
+              )}
+            </div>
 
                 {/* Cover Letter Code Editor Header */}
                 <div className={`flex items-center justify-between border-t pt-4 ${borderClass}`}>

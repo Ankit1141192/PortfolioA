@@ -19,8 +19,25 @@ mongoose.connect(process.env.MONGODB_URI)
   .catch(err => console.error("MongoDB connection error:", err));
 
 // Middleware
+const allowedDomains = [
+  "ankitkumar1141-portfolio.vercel.app",
+  "localhost",
+  "127.0.0.1"
+];
+
 app.use(cors({
-  origin: "https://ankitkumar1141-portfolio.vercel.app",
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    try {
+      const url = new URL(origin);
+      if (allowedDomains.includes(url.hostname)) {
+        return callback(null, true);
+      }
+    } catch (e) {
+      // Fallback if origin is not a standard parseable URL
+    }
+    return callback(new Error("Not allowed by CORS"), false);
+  },
   methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
   credentials: true
 }));

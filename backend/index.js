@@ -19,7 +19,11 @@ mongoose.connect(process.env.MONGODB_URI)
   .catch(err => console.error("MongoDB connection error:", err));
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: "https://ankitkumar1141-portfolio.vercel.app",
+  methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+  credentials: true
+}));
 app.use(express.json());
 
 // Serve static uploads

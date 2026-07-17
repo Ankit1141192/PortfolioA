@@ -1,1 +1,1 @@
-export const backendApi = "https://pink-herring-957072.hostingersite.com"
+export const backendApi = import.meta.env.VITE_BACKEND_API || "http://localhost:5000";

@@ -15,6 +15,7 @@ export default function Navbar() {
     { id: 'skills', label: 'Skills', path: '/skills' },
     { id: 'services', label: 'Services', path: '/services' },
     { id: 'projects', label: 'Projects', path: '/projects' },
+    { id: 'appliedJob', label: 'Applied Jobs', path: '/appliedJob' },
     { id: 'contact', label: 'Contact', path: '/contact' },
   ];
 
@@ -68,8 +69,9 @@ export default function Navbar() {
 
   // Set active section based on current route
   useEffect(() => {
-    const currentPath = location.pathname;
-    const currentItem = navItems.find(item => item.path === currentPath);
+    const currentPath = location.pathname.replace(/\/$/, ""); // Remove trailing slash
+    const normalizedPath = currentPath === "" ? "/" : currentPath;
+    const currentItem = navItems.find(item => item.path.toLowerCase() === normalizedPath.toLowerCase());
     if (currentItem) {
       setActiveSection(currentItem.id);
     }
@@ -82,7 +84,7 @@ export default function Navbar() {
   return (
     <>
       {/* Navbar */}
-      <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-[90%] max-w-6xl bg-white/90 dark:bg-gray-800/80 backdrop-blur-md rounded-full px-6 py-3 shadow-lg border border-gray-200/50 dark:border-gray-600/50">
+      <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-[9999] w-[90%] max-w-6xl bg-white/90 dark:bg-gray-800/80 backdrop-blur-md rounded-full px-6 py-3 shadow-lg border border-gray-200/50 dark:border-gray-600/50">
         <div className="flex items-center justify-between">
 
           {/* Left: Logo */}

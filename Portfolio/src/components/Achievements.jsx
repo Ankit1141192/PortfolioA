@@ -1,114 +1,88 @@
 import { useState } from "react";
-import { CheckCheck } from "lucide-react";  // <-- LUCIDE ICON
-import cert1 from "../assets/cert1.jpg";
-import cert2 from "../assets/cert2.jpg";
-import cert3 from "../assets/cert3.jpg";
+import { motion, AnimatePresence } from "framer-motion";
+import { FiAward, FiExternalLink, FiX, FiEye } from "react-icons/fi";
+import { achievements } from "../data/achievements";
 
 export default function Achievements() {
-  const [selectedImage, setSelectedImage] = useState(null);
-
-  const certificates = [
-  {
-    id: 2,
-    title: "Construct Week Project",
-    issuer: "Masai School",
-    date: "March 2025",
-    image: cert3,
-    verifiedLink: "https://certs.masaischool.com/certificate/cww-b43-ft38_694",
-  },
-  {
-    id: 3,
-    title: "Generative AI",
-    issuer: "Techgyan",
-    date: "August 2025",
-    image: cert2,
-    // verifiedLink: "https://your-generative-ai-link.com",
-  },
-  {
-    id: 1,
-    title: "HackArena - Hackathon by Masai",
-    issuer: "NOBROKER",
-    date: "Oct 2025",
-    image: cert1,
-    // verifiedLink: "https://your-hackarena-link.com",
-  },
-];
-
+  const [selectedImg, setSelectedImg] = useState(null);
 
   return (
-    <section
-      id="achievements"
-      className="py-16 bg-gray-100 dark:bg-gray-800 relative"
-    >
-      <div
-        className={`max-w-6xl mx-auto px-6 text-center transition-all duration-300 ${
-          selectedImage ? "blur-sm" : ""
-        }`}
-      >
-        <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-10">
-          Achievements & Certificates
+    <section className="relative py-20 bg-panel2 border-t border-line">
+      <div className="max-w-6xl mx-auto px-6">
+        <h2 className="font-display text-2xl sm:text-3xl font-semibold text-paper mb-10 text-center">
+          Achievements &amp; certificates
         </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {certificates.map((cert) => (
-            <div
-              key={cert.id}
-              className="relative bg-white dark:bg-gray-700 shadow-md rounded-2xl p-6 hover:shadow-lg transition duration-200"
+        <div className="grid sm:grid-cols-3 gap-5">
+          {achievements.map((a, i) => (
+            <motion.div
+              key={a.title}
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ delay: i * 0.08, duration: 0.4 }}
+              className="rounded-xl border border-line bg-panel p-6 text-center flex flex-col justify-between"
             >
-              {/* Verified Icon */}
-              {cert.verifiedLink && (
-                <a
-                  href={cert.verifiedLink}
-                  target="_blank"
-                  className="absolute top-3 right-3 bg-pink-600 text-white p-1.5 rounded-full shadow-md hover:bg-pink-700 transition"
-                >
-                  <CheckCheck size={18} />
-                </a>
-              )}
-
-              <h3 className="text-lg font-semibold text-blue-600 mb-2">
-                {cert.title}
-              </h3>
-              <p className="text-gray-700 dark:text-gray-300">
-                {cert.issuer}
-              </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                {cert.date}
-              </p>
-
-              <button
-                onClick={() => setSelectedImage(cert.image)}
-                className="inline-block px-6 py-3 rounded-full font-medium bg-blue-600 text-white hover:bg-blue-700 transition duration-200 shadow-md"
-              >
-                View Certificate
-              </button>
-            </div>
+              <div>
+                <FiAward className="mx-auto text-amber mb-3" size={22} />
+                <h3 className="font-display text-base font-semibold text-paper mb-1">{a.title}</h3>
+                <p className="text-muted text-sm mb-0.5">{a.org}</p>
+                <p className="text-muted/70 text-xs font-mono mb-4">{a.date}</p>
+              </div>
+              <div className="flex items-center justify-center gap-4 pt-2">
+                {a.link && a.link !== "#" && (
+                  <a
+                    href={a.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 text-cyan text-sm hover:text-paper transition-colors font-mono"
+                  >
+                    Verify <FiExternalLink size={14} />
+                  </a>
+                )}
+                {a.image && (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedImg(a.image)}
+                    className="inline-flex items-center gap-1.5 text-amber text-sm hover:text-paper transition-colors font-mono"
+                  >
+                    Preview <FiEye size={14} />
+                  </button>
+                )}
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>
 
-      {selectedImage && (
-        <div
-          className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50"
-          onClick={() => setSelectedImage(null)}
-        >
-          <div className="relative max-w-3xl w-full p-4">
-            <img
-              src={selectedImage}
-              alt="Certificate"
-              className="w-full rounded-xl shadow-xl border-2 border-white"
-            />
-
-            {/* Close Button */}
-            <button
-              className="absolute top-3 right-3 bg-white text-black rounded-full px-3 py-1 text-sm font-bold shadow-md"
-              onClick={() => setSelectedImage(null)}
+      {/* Certificate Modal */}
+      <AnimatePresence>
+        {selectedImg && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+            onClick={() => setSelectedImg(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="relative max-w-2xl w-full bg-panel border border-line rounded-xl overflow-hidden shadow-2xl p-2"
+              onClick={(e) => e.stopPropagation()}
             >
-              ✕
-            </button>
+              <button
+                onClick={() => setSelectedImg(null)}
+                className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/60 text-paper hover:text-cyan flex items-center justify-center transition-colors"
+              >
+                <FiX size={18} />
+              </button>
+              <img
+                src={selectedImg}
+                alt="Certificate preview"
+                className="w-full max-h-[80vh] object-contain rounded-lg"
+              />
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </section>
   );
 }

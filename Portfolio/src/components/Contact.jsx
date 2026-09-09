@@ -1,301 +1,282 @@
-import { useState } from 'react';
-import ScheduleModal from './ScheduleModal';
-import call from '../assets/call.svg';
-import gmail from '../assets/gmail.svg';
-import location from '../assets/location.svg';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { FiMail, FiPhone, FiMapPin, FiSend } from "react-icons/fi";
+import { SectionTag } from "./About";
+import ScheduleModal from "./ScheduleModal";
+
+const emptyForm = {
+  name: "",
+  email: "",
+  phone: "",
+  subject: "",
+  message: "",
+};
+
+// Google Apps Script Web App URL
+const GOOGLE_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbxMsp13pDnKrWa6ZPzZ16IL2iz1ybKEyD_6luiMlaIFgS5wkuqIbb-vT07Dqc6KssSd/exec";
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-    number: ''
-  });
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState('');
-  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
+  const [form, setForm] = useState(emptyForm);
+  const [submitting, setSubmitting] = useState(false);
+  const [result, setResult] = useState(null);
+  const [isScheduleOpen, setIsScheduleOpen] = useState(false);
 
   const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
+
+    setSubmitting(true);
+    setResult(null);
 
     try {
-      const scriptURL = 'https://script.google.com/macros/s/AKfycbxMsp13pDnKrWa6ZPzZ16IL2iz1ybKEyD_6luiMlaIFgS5wkuqIbb-vT07Dqc6KssSd/exec';
       const googleFormData = new FormData();
-      googleFormData.append('Name', formData.name);
-      googleFormData.append('Email', formData.email);
-      googleFormData.append('Subject', formData.subject);
-      googleFormData.append('Message', formData.message);
-      googleFormData.append('Number', formData.number);
 
-      const response = await fetch(scriptURL, {
-        method: 'POST',
+      googleFormData.append("Name", form.name);
+      googleFormData.append("Email", form.email);
+      googleFormData.append("Number", form.phone);
+      googleFormData.append("Subject", form.subject);
+      googleFormData.append("Message", form.message);
+
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
         body: googleFormData,
       });
 
-      if (response.ok) {
-        setSubmitStatus('success');
-        setFormData({ name: '', email: '', subject: '', message: '', number: '' });
-      } else {
-        setSubmitStatus('error');
+      if (!response.ok) {
+        throw new Error("Failed to submit contact form");
       }
+
+      setResult("ok");
+      setForm(emptyForm);
     } catch (error) {
-      setSubmitStatus('error');
-      console.error('Error!', error.message);
+      console.error("Contact form error:", error);
+      setResult("error");
     } finally {
-      setIsSubmitting(false);
-      setTimeout(() => setSubmitStatus(''), 5000);
+      setSubmitting(false);
+
+      setTimeout(() => {
+        setResult(null);
+      }, 5000);
     }
   };
 
-  const contactInfo = [
-    {
-      icon: gmail,
-      title: 'Email',
-      value: 'ankit2914978@gmail.com',
-      link: 'mailto:ankit2914978@gmail.com',
-      color: 'bg-blue-500'
-    },
-    {
-      icon: call,
-      title: 'Phone',
-      value: '+91 8707538123',
-      link: 'tel:+918707538123',
-      color: 'bg-green-500'
-    },
-    {
-      icon: location,
-      title: 'Location',
-      value: 'Kanpur, India',
-      link: '#',
-      color: 'bg-red-500'
-    }
-  ];
-
   return (
-    <>
-      <section id="contact" className="py-20 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4">
-              Contact Me
-            </h2>
-            <div className="w-20 h-1 bg-blue-600 mx-auto rounded-full mb-6"></div>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Let's discuss your project and bring your ideas to life. I'm always excited to work on new challenges.
-            </p>
-          </div>
+    <section
+      id="contact"
+      className="relative py-28 bg-ink border-t border-line"
+    >
+      <div className="max-w-6xl mx-auto px-6">
+        <SectionTag n="06" label="contact" />
 
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div className="space-y-8">
-              <div>
-                <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
-                  Get In Touch
-                </h3>
-                <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
-                  I'm currently available for freelance work and exciting project opportunities. 
-                  Whether you have a project in mind or just want to chat about technology, 
-                  feel free to reach out!
-                </p>
-              </div>
+        <h2 className="font-display text-3xl sm:text-4xl font-semibold text-paper mt-8 mb-3 max-w-lg">
+          Let's talk about your project.
+        </h2>
 
-              <div className="grid sm:grid-cols-2 gap-6">
-                {contactInfo.map((info, index) => (
-                  <a
-                    key={index}
-                    href={info.link}
-                    className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <div className={`w-12 h-12 flex items-center justify-center rounded-full  group-hover:scale-110 transition-transform duration-200`}>
-                        <img src={info.icon} alt={info.title} className="w-8 h-8" />
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                          {info.title}
-                        </h4>
-                        <p className="text-gray-800 dark:text-white font-medium">
-                          {info.value}
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                ))}
-              </div>
+        <p className="text-muted leading-relaxed max-w-lg mb-14">
+          Freelance work, full-time roles, or just a technical question — my
+          inbox is open. I usually reply within a day.
+        </p>
 
-              <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6 rounded-2xl text-white">
-                <h4 className="text-xl font-bold mb-3">Let's Start a Project Together</h4>
-                <p className="mb-4">
-                  Ready to transform your ideas into reality? I'd love to hear about your project.
-                </p>
-                <button 
-                  onClick={() => setIsScheduleModalOpen(true)}
-                  className="bg-white text-blue-600 px-6 py-2 rounded-full font-medium hover:bg-gray-100 transition-colors cursor-pointer whitespace-nowrap"
-                >
-                  Schedule a Call
-                </button>
-              </div>
-            </div>
+        <div className="grid md:grid-cols-[0.9fr_1.1fr] gap-10">
+          {/* LEFT SIDE */}
+          <div className="space-y-4">
+            <ContactRow
+              icon={FiMail}
+              label="Email"
+              value="ankit2914978@gmail.com"
+              href="mailto:ankit2914978@gmail.com"
+            />
 
-            {/* Form Side */}
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl">
-              <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
-                Send Message
+            <ContactRow
+              icon={FiPhone}
+              label="Phone"
+              value="+91 8707538123"
+              href="tel:+918707538123"
+            />
+
+            <ContactRow
+              icon={FiMapPin}
+              label="Location"
+              value="Kanpur, India"
+            />
+
+            {/* SCHEDULE CALL */}
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="rounded-xl bg-gradient-to-br from-cyan/10 to-amber/10 border border-line p-6 mt-6"
+            >
+              <h3 className="font-display text-lg font-semibold text-paper mb-2">
+                Ready to start a project?
               </h3>
 
-              {submitStatus === 'success' && (
-                <div className="mb-6 p-4 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 rounded-lg">
-                  Thank you! Your message has been sent successfully.
-                </div>
-              )}
+              <p className="text-muted text-sm mb-4">
+                Available for freelance work and full-time opportunities.
+                Select a time on my calendar for a 1-on-1 call.
+              </p>
 
-              {submitStatus === 'error' && (
-                <div className="mb-6 p-4 bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200 rounded-lg">
-                  Sorry, there was an error sending your message. Please try again.
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid sm:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Name *
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-                      placeholder="Your Name"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Email *
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-                      placeholder="your.email@example.com"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Number *
-                  </label>
-                  <input
-                    type="text"
-                    name="number"
-                    value={formData.number}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-                    placeholder="Your Phone Number"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Subject *
-                  </label>
-                  <input
-                    type="text"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-                    placeholder="Project Discussion"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Message *
-                  </label>
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    required
-                    maxLength={500}
-                    rows={6}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm resize-none"
-                    placeholder="Tell me about your project..."
-                  ></textarea>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    {formData.message.length}/500 characters
-                  </p>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting || formData.message.length > 500}
-                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 px-6 rounded-lg font-medium transition-colors cursor-pointer whitespace-nowrap flex items-center justify-center space-x-2"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      <span>Sending...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Send Message</span>
-                    </>
-                  )}
-                </button>
-              </form>
-            </div>
+              <button
+                type="button"
+                onClick={() => setIsScheduleOpen(true)}
+                className="inline-flex items-center gap-2 bg-paper text-ink font-display font-semibold px-4 py-2.5 rounded-md hover:bg-cyan transition-colors text-sm cursor-pointer"
+              >
+                Schedule a call
+              </button>
+            </motion.div>
           </div>
 
-          <div className="text-center mt-16">
-            <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
-              Follow me on social media for updates and behind-the-scenes content
+          {/* CONTACT FORM */}
+          <motion.form
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            onSubmit={handleSubmit}
+            className="rounded-xl border border-line bg-panel p-6"
+          >
+            <div className="grid sm:grid-cols-2 gap-4 mb-4">
+              <Field label="Name *">
+                <input
+                  type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={handleInputChange}
+                  className="input"
+                  placeholder="Your name"
+                  required
+                />
+              </Field>
+
+              <Field label="Email *">
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleInputChange}
+                  className="input"
+                  placeholder="you@example.com"
+                  required
+                />
+              </Field>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-4 mb-4">
+              <Field label="Phone">
+                <input
+                  type="tel"
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleInputChange}
+                  className="input"
+                  placeholder="Optional"
+                />
+              </Field>
+
+              <Field label="Subject *">
+                <input
+                  type="text"
+                  name="subject"
+                  value={form.subject}
+                  onChange={handleInputChange}
+                  className="input"
+                  placeholder="Project description"
+                  required
+                />
+              </Field>
+            </div>
+
+            <Field label="Message *">
+              <textarea
+                name="message"
+                value={form.message}
+                onChange={handleInputChange}
+                className="input min-h-[120px] resize-none mb-4"
+                placeholder="Tell me about your project…"
+                required
+                maxLength={500}
+              />
+            </Field>
+
+            <p className="text-xs text-muted mb-4">
+              {form.message.length}/500 characters
             </p>
-            <div className="flex items-center justify-center space-x-6">
-              {[
-                { icon: 'linkedin', href: 'https://www.linkedin.com/in/ankit1141/', color: 'hover:text-blue-700' },
-                { icon: 'github', href: 'https://github.com/Ankit1141192', color: 'hover:text-gray-800 dark:hover:text-gray-300' },
-                { icon: 'twitter', href: 'https://x.com/ankitk09773', color: 'hover:text-blue-500' },
-                { icon: 'instagram', href: 'https://www.instagram.com/mr_ankitkumar4954/', color: 'hover:text-pink-600' },
-                
-              ].map((social) => (
-                <a
-                  key={social.icon}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`w-12 h-12 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-all duration-200 text-gray-600 dark:text-gray-300 cursor-pointer ${social.color}`}
-                >
-                  <i className={`ri-${social.icon}-${social.icon === 'github' ? 'fill' : 'line'} text-xl`}></i>
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
+            {/* SUCCESS MESSAGE */}
+            {result === "ok" && (
+              <p className="text-cyan text-sm mb-3">
+                Message sent — I'll be in touch soon.
+              </p>
+            )}
+
+            {/* ERROR MESSAGE */}
+            {result === "error" && (
+              <p className="text-red-400 text-sm mb-3">
+                Couldn't send that. Please try again or email me directly.
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={submitting}
+              className="w-full inline-flex items-center justify-center gap-2 bg-amber text-ink font-display font-semibold py-3 rounded-md hover:bg-amber-dim transition-colors disabled:opacity-60"
+            >
+              <FiSend />
+
+              {submitting ? "Sending…" : "Send message"}
+            </button>
+          </motion.form>
+        </div>
+      </div>
+
+      {/* SCHEDULE MODAL ONLY */}
       <ScheduleModal
-        isOpen={isScheduleModalOpen}
-        onClose={() => setIsScheduleModalOpen(false)}
+        isOpen={isScheduleOpen}
+        onClose={() => setIsScheduleOpen(false)}
       />
-    </>
+    </section>
+  );
+}
+
+/* CONTACT ROW */
+
+function ContactRow({ icon: Icon, label, value, href }) {
+  const content = (
+    <div className="flex items-center gap-4 rounded-lg border border-line bg-panel px-4 py-3.5 hover:border-cyan/50 transition-colors">
+      <div className="w-9 h-9 rounded-md bg-panel2 flex items-center justify-center text-cyan shrink-0">
+        <Icon />
+      </div>
+
+      <div>
+        <div className="text-xs text-muted">{label}</div>
+        <div className="text-sm text-paper">{value}</div>
+      </div>
+    </div>
+  );
+
+  return href ? <a href={href}>{content}</a> : content;
+}
+
+/* FORM FIELD */
+
+function Field({ label, children }) {
+  return (
+    <label className="block">
+      <span className="block text-xs font-mono text-muted mb-1.5">
+        {label}
+      </span>
+
+      {children}
+    </label>
   );
 }

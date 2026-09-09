@@ -1,214 +1,123 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useTheme } from '../context/ThemeContext';
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { HiMenu, HiX } from "react-icons/hi";
+
+const tabs = [
+  { id: "about", label: "about" },
+  { id: "skills", label: "skills" },
+  { id: "services", label: "services" },
+  { id: "projects", label: "projects" },
+  { id: "feedback", label: "feedback" },
+  { id: "contact", label: "contact" },
+];
 
 export default function Navbar() {
-  const [activeSection, setActiveSection] = useState('home');
-  const [menuOpen, setMenuOpen] = useState(false);
-  const { darkMode, toggleDarkMode } = useTheme();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState("about");
 
-  const navItems = [
-    { id: 'home', label: 'Home', path: '/' },
-    { id: 'about', label: 'About', path: '/about' },
-    { id: 'skills', label: 'Skills', path: '/skills' },
-    { id: 'services', label: 'Services', path: '/services' },
-    { id: 'projects', label: 'Projects', path: '/projects' },
-    { id: 'appliedJob', label: 'Applied Jobs', path: '/appliedJob' },
-    { id: 'contact', label: 'Contact', path: '/contact' },
-  ];
-
-  const handleNavigation = (path, sectionId) => {
-    if (location.pathname === '/' && path === '/') {
-      // We're on homepage, scroll to section
-      scrollToSection(sectionId);
-    } else if (path === '/') {
-      // Navigate to homepage
-      navigate('/');
-      setActiveSection('home');
-    } else {
-      // Navigate to individual page
-      navigate(path);
-      setActiveSection(sectionId);
-    }
-    setMenuOpen(false);
-  };
-
-  const scrollToSection = (sectionId) => {
-    setActiveSection(sectionId);
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  // Track scroll position on homepage
   useEffect(() => {
-    if (location.pathname !== '/') return;
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    window.addEventListener("scroll", onScroll);
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-    const handleScroll = () => {
-      const sections = ['home', 'about', 'skills', 'services', 'projects', 'contact'];
-      const scrollPosition = window.scrollY + 100;
-
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [location.pathname]);
-
-  // Set active section based on current route
   useEffect(() => {
-    const currentPath = location.pathname.replace(/\/$/, ""); // Remove trailing slash
-    const normalizedPath = currentPath === "" ? "/" : currentPath;
-    const currentItem = navItems.find(item => item.path.toLowerCase() === normalizedPath.toLowerCase());
-    if (currentItem) {
-      setActiveSection(currentItem.id);
-    }
-  }, [location.pathname]);
+    const sections = tabs.map((t) => document.getElementById(t.id)).filter(Boolean);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        });
+      },
+      { rootMargin: "-40% 0px -50% 0px" }
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, []);
 
-  const isActive = (sectionId) => {
-    return activeSection === sectionId;
+  const go = (id) => {
+    setOpen(false);
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <>
-      {/* Navbar */}
-      <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-[9999] w-[90%] max-w-6xl bg-white/90 dark:bg-gray-800/80 backdrop-blur-md rounded-full px-6 py-3 shadow-lg border border-gray-200/50 dark:border-gray-600/50">
-        <div className="flex items-center justify-between">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
+        scrolled ? "bg-ink/90 backdrop-blur border-b border-line" : "bg-transparent"
+      }`}
+    >
+      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <button
+          onClick={() => go("hero")}
+          className="font-display font-semibold text-paper text-lg tracking-tight flex items-center gap-2"
+        >
+          <span className="text-cyan font-mono text-sm">&lt;</span>
+          Ankit Kumar
+          <span className="text-cyan font-mono text-sm">/&gt;</span>
+        </button>
 
-          {/* Left: Logo */}
-          <button
-            onClick={() => handleNavigation('/', 'home')}
-            className="text-2xl font-bold text-gray-800 font-[cursive] hover:scale-105 transition-transform"
+        <nav className="hidden md:flex items-center gap-1 font-mono text-sm">
+          {tabs.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => go(t.id)}
+              className={`relative px-3 py-1.5 rounded-t-md tab-notch transition-colors ${
+                active === t.id ? "text-paper bg-panel" : "text-muted hover:text-paper"
+              }`}
+            >
+              {t.label}
+              {active === t.id && (
+                <motion.span
+                  layoutId="navUnderline"
+                  className="absolute left-2 right-2 -bottom-px h-[2px] bg-amber"
+                />
+              )}
+            </button>
+          ))}
+        </nav>
+
+        <button
+          onClick={() => go("contact")}
+          className="hidden md:inline-flex items-center gap-2 bg-amber text-ink font-display font-semibold text-sm px-4 py-2 rounded-md hover:bg-amber-dim transition-colors"
+        >
+          Hire me
+        </button>
+
+        <button className="md:hidden text-paper text-2xl" onClick={() => setOpen((o) => !o)}>
+          {open ? <HiX /> : <HiMenu />}
+        </button>
+      </div>
+
+      <AnimatePresence>
+        {open && (
+          <motion.nav
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="md:hidden overflow-hidden bg-ink border-b border-line font-mono text-sm"
           >
-            <span className="text-purple-500">Ankit Kumar</span>
-          </button>
-
-          {/* Center: Desktop Nav */}
-          <div className="hidden sm:flex flex-1 items-center justify-center space-x-6">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => handleNavigation(item.path, item.id)}
-                className={`text-sm font-medium transition-colors duration-200 hover:text-blue-600 dark:hover:text-blue-400 ${isActive(item.id)
-                    ? 'text-blue-600 dark:text-blue-400'
-                    : 'text-gray-600 dark:text-gray-300'
-                  }`}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Right: Desktop Toggle + Button */}
-          <div className="hidden sm:flex items-center space-x-3">
-            <button
-              onClick={toggleDarkMode}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300 hover:scale-110"
-              aria-label="Toggle theme"
-            >
-              <i
-                className={`ri-${darkMode ? 'sun' : 'moon'}-line text-lg text-gray-600 dark:text-gray-300`}
-              ></i>
-            </button>
-
-            <a
-              href="https://drive.google.com/file/d/1hL47ppIqoRxjsb8JzUFwmLmRYi4k1rKm/view?usp=sharing"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center space-x-2 whitespace-nowrap"
-            >
-              <span>View Resume</span>
-              <i className="ri-external-link-line text-sm"></i>
-            </a>
-          </div>
-
-          {/* Right: Mobile Hamburger */}
-          <div className="sm:hidden">
-            <button
-              onClick={() => setMenuOpen(true)}
-              className="text-2xl text-gray-700 dark:text-white"
-            >
-              <i className="ri-menu-line"></i>
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Mobile Slide-In Menu */}
-      {menuOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex justify-end ">
-          <div className="w-[70%] max-w-xs h-full bg-white dark:bg-gray-900 shadow-lg p-6 transition-all duration-300">
-            <div className="flex justify-between items-center mb-6">
-              <button
-                onClick={() => handleNavigation('/', 'home')}
-                className="text-xl font-bold text-purple-500"
-              >
-                Ankit
-              </button>
-              <button
-                onClick={() => setMenuOpen(false)}
-                className="text-2xl text-gray-700 dark:text-white"
-              >
-                <i className="ri-close-line"></i>
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {navItems.map((item) => (
+            <div className="flex flex-col px-6 py-3 gap-1">
+              {tabs.map((t) => (
                 <button
-                  key={item.id}
-                  onClick={() => handleNavigation(item.path, item.id)}
-                  className={`block w-full text-left px-2 py-2 rounded hover:bg-blue-100 dark:hover:bg-gray-700 transition ${isActive(item.id)
-                      ? 'text-blue-600 dark:text-blue-400'
-                      : 'text-gray-600 dark:text-gray-300'
-                    }`}
+                  key={t.id}
+                  onClick={() => go(t.id)}
+                  className={`text-left py-2 ${active === t.id ? "text-amber" : "text-muted"}`}
                 >
-                  {item.label}
+                  {t.label}
                 </button>
               ))}
-
-              {/* Divider */}
-              <hr className="my-4 border-gray-300 dark:border-gray-600" />
-
-              {/* Dark Mode Toggle */}
               <button
-                onClick={toggleDarkMode}
-                className="w-full flex items-center justify-between px-2 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                onClick={() => go("contact")}
+                className="mt-2 bg-amber text-ink font-display font-semibold px-4 py-2 rounded-md text-center"
               >
-                <span className="text-gray-700 dark:text-gray-300 font-medium">
-                  {darkMode ? 'Light Mode' : 'Dark Mode'}
-                </span>
-                <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
-                  <i className={`ri-${darkMode ? 'sun' : 'moon'}-line text-lg text-gray-600 dark:text-gray-300`}></i>
-                </div>
+                Hire me
               </button>
-
-              {/* Hire Me Button */}
-              <a
-                href="https://drive.google.com/uc?export=download&id=1hL47ppIqoRxjsb8JzUFwmLmRYi4k1rKm"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-3 w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center justify-center space-x-2"
-              >
-                <span>Hire Me</span>
-                <i className="ri-download-line text-sm"></i>
-              </a>
             </div>
-          </div>
-        </div>
-      )}
-    </>
+          </motion.nav>
+        )}
+      </AnimatePresence>
+    </header>
   );
 }

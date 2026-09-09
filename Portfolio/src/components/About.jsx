@@ -1,90 +1,106 @@
-import photo1 from "../assets/profile.png";
+import { motion } from "framer-motion";
+import { FiMapPin, FiCheckCircle, FiWifi } from "react-icons/fi";
+
+const badges = [
+  { icon: FiMapPin, label: "Kanpur, India" },
+  { icon: FiCheckCircle, label: "Open to opportunities" },
+  { icon: FiWifi, label: "Remote friendly" },
+];
+
+const stats = [
+  { value: "10+", label: "Projects built" },
+  { value: "1+", label: "Years of learning" },
+  { value: "3+", label: "Hackathons" },
+  { value: "5+", label: "Technologies used" },
+];
 
 export default function About() {
-  const stats = [
-    { number: "10+", label: "Projects Built" },
-    { number: "1+", label: "Years of Learning" },
-    { number: "3+", label: "Hackathons Participated" },
-    { number: "5+", label: "Technologies Used" },
-  ];
-
   return (
-    <section id="about" className="py-20 px-4">
-      <div className="max-w-6xl mx-auto">
+    <section id="about" className="relative py-28 bg-ink border-t border-line">
+      <div className="max-w-6xl mx-auto px-6">
+        <SectionTag n="01" label="about" />
 
-        {/* Section Title */}
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4">
-            About Me
-          </h2>
-          <div className="w-20 h-1 bg-blue-600 mx-auto rounded-full"></div>
-        </div>
-
-        {/* About Content */}
-        <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
-
-          {/* Text */}
-          <div className="space-y-6">
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">
-              Aspiring Full Stack Developer
-            </h3>
-
-            <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-              I'm a MERN Stack Developer with hands-on experience building real-world web
-              and mobile applications. I’ve completed 10+ projects, participated in
-              hackathons, and constantly improve my skills through practical learning.
-              I enjoy creating clean, scalable apps and I'm open to new opportunities.
+        <div className="grid md:grid-cols-[1.1fr_0.9fr] gap-14 items-start mt-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="font-display text-3xl sm:text-4xl font-semibold text-paper mb-6">
+              Aspiring full-stack developer,
+              <br /> one shipped project at a time.
+            </h2>
+            <p className="text-muted leading-relaxed mb-4">
+              I'm a MERN stack developer with hands-on experience building real-world web and
+              mobile applications. I've completed 10+ projects, taken part in hackathons, and
+              I keep sharpening my skills through deliberate practice — writing clean, scalable
+              code that's built to be maintained, not just shipped once.
+            </p>
+            <p className="text-muted leading-relaxed mb-8">
+              Outside of scheduled work, I'm open to freelance builds, contract roles, and
+              full-time opportunities where I can own a problem end to end.
             </p>
 
-            <div className="flex flex-wrap gap-4">
-              <div className="bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow-md">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  📍 Kanpur, India
+            <div className="flex flex-wrap gap-3 mb-10">
+              {badges.map(({ icon: Icon, label }) => (
+                <span
+                  key={label}
+                  className="inline-flex items-center gap-2 border border-line rounded-full px-3 py-1.5 text-sm text-muted font-mono"
+                >
+                  <Icon className="text-cyan" /> {label}
                 </span>
-              </div>
-              <div className="bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow-md">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  💼 Open to Opportunities
-                </span>
-              </div>
-              <div className="bg-white dark:bg-gray-800 px-4 py-2 rounded-full shadow-md">
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  🌐 Remote Friendly
-                </span>
-              </div>
+              ))}
             </div>
-          </div>
 
-          {/* Image */}
-          <div className="relative flex justify-center">
-            <div className="rounded-xl overflow-hidden shadow-xl w-55 h-55 sm:w-100 sm:h-100 md:w-80 md:h-80 lg:w-96 lg:h-96">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {stats.map((s, i) => (
+                <motion.div
+                  key={s.label}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08, duration: 0.4 }}
+                  className="border border-line rounded-lg py-4 px-3 text-center bg-panel"
+                >
+                  <div className="font-display text-2xl font-semibold text-paper">{s.value}</div>
+                  <div className="text-xs text-muted mt-1">{s.label}</div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6 }}
+            className="relative"
+          >
+            <div className="absolute -inset-3 border border-line rounded-2xl -z-10" />
+            <div className="rounded-xl overflow-hidden border border-line bg-panel aspect-[4/5]">
               <img
-                src={photo1}
-                alt="About me"
-                className="w-full h-full object-cover object-top"
+                src="/profile.png"
+                alt="Portrait of Ankit Kumar"
+                className="w-full h-full object-cover grayscale-[15%]"
               />
             </div>
-          </div>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {stats.map((stat, index) => (
-            <div
-              key={index}
-              className="text-center bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300"
-            >
-              <div className="text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">
-                {stat.number}
-              </div>
-              <div className="text-gray-600 dark:text-gray-300 font-medium">
-                {stat.label}
-              </div>
+            <div className="absolute -bottom-5 -left-5 bg-panel border border-line rounded-lg px-4 py-3 font-mono text-xs text-cyan shadow-panel">
+              status: <span className="text-amber">available</span>
             </div>
-          ))}
+          </motion.div>
         </div>
-
       </div>
     </section>
+  );
+}
+
+export function SectionTag({ n, label }) {
+  return (
+    <div className="flex items-center gap-3 font-mono text-xs text-muted">
+      <span className="text-amber">{n}</span>
+      <span className="h-px flex-1 max-w-[40px] bg-line" />
+      <span>{label}</span>
+    </div>
   );
 }

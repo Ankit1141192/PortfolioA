@@ -1,323 +1,325 @@
-import { useState } from 'react';
-import { backendApi } from '../config/api';
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { FiX, FiCalendar, FiClock, FiCheckCircle, FiAlertCircle } from "react-icons/fi";
+import { fetchBookedSlots, postScheduleMeeting } from "../lib/api";
+
+const timeSlots = [
+  "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
+  "01:00 PM", "01:30 PM", "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM",
+  "04:00 PM", "04:30 PM", "05:00 PM"
+];
+
+const purposes = [
+  "New Project Discussion",
+  "Full-Stack Web Development",
+  "React Native Mobile App",
+  "Freelance Collaboration",
+  "Consultation & Tech Advice",
+  "Other"
+];
+
+const timezones = [
+  "Asia/Kolkata",
+  "America/New_York",
+  "America/Los_Angeles",
+  "Europe/London",
+  "Europe/Berlin",
+  "Asia/Dubai",
+  "Asia/Singapore",
+  "Australia/Sydney"
+];
 
 export default function ScheduleModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    date: '',
-    time: '',
-    timezone: 'Asia/Kolkata',
-    purpose: '',
-    message: ''
+    name: "",
+    email: "",
+    date: "",
+    time: "",
+    timezone: "Asia/Kolkata",
+    purpose: purposes[0],
+    message: ""
   });
 
   const [bookedSlots, setBookedSlots] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState('');
+  const [loadingSlots, setLoadingSlots] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [status, setStatus] = useState({ type: "", message: "" });
 
-  const timeSlots = [
-    '09:00 AM','09:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM',
-    '01:00 PM','01:30 PM','02:00 PM','02:30 PM','03:00 PM','03:30 PM',
-    '04:00 PM','04:30 PM','05:00 PM'
-  ];
+  const todayStr = new Date().toISOString().split("T")[0];
 
-  const purposes = [
-    'New Project Discussion','Web Development','Mobile App Development',
-    'UI/UX Design','Consultation','Other'
-  ];
+  useEffect(() => {
+    if (!formData.date) return;
+    let isMounted = true;
+    setLoadingSlots(true);
 
-  const timezones = [
-    'Asia/Kolkata','America/New_York','America/Los_Angeles',
-    'Europe/London','Europe/Berlin','Asia/Tokyo','Australia/Sydney',
-    'Asia/Dubai','Asia/Singapore'
-  ];
+    fetchBookedSlots(formData.date)
+      .then((data) => {
+        if (isMounted) {
+          setBookedSlots(data?.booked || []);
+        }
+      })
+      .catch((err) => {
+        console.warn("Could not fetch booked slots:", err.message);
+      })
+      .finally(() => {
+        if (isMounted) setLoadingSlots(false);
+      });
 
-  // -------------------------------
-  // Handle input
-  // -------------------------------
-  const handleInputChange = (e) => {
+    return () => {
+      isMounted = false;
+    };
+  }, [formData.date]);
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
-
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
+      ...(name === "date" ? { time: "" } : {})
     }));
-
-    if (name === 'date') {
-      setFormData(prev => ({ ...prev, time: '' }));
-      fetchBookedSlots(value);
-    }
   };
 
-  // -------------------------------
-  // Minimum date (today)
-  // -------------------------------
-  const getMinDate = () => {
-    const today = new Date();
-    return today.toISOString().split('T')[0];
-  };
-
-  // -------------------------------
-  // Fetch booked slots
-  // -------------------------------
-  const fetchBookedSlots = async (date) => {
-    if (!date) return;
-    try {
-      const res = await fetch(`${backendApi}/booked-slots?date=${date}`);
-      const data = await res.json();
-      setBookedSlots(data.booked || []);
-    } catch (err) {
-      console.error("Failed to fetch booked slots", err);
-    }
-  };
-
-  // -------------------------------
-  // TIME SLOT FILTERING FOR TODAY
-  // -------------------------------
   const getFilteredSlots = () => {
     if (!formData.date) return timeSlots;
+    const isToday = formData.date === todayStr;
+    if (!isToday) return timeSlots;
 
-    const selectedDate = new Date(formData.date);
-    const today = new Date();
+    const buffer = new Date();
+    buffer.setMinutes(buffer.getMinutes() + 30);
 
-    // Not today → return all slots
-    if (selectedDate.toDateString() !== today.toDateString()) {
-      return timeSlots;
-    }
-
-    // If today → remove past slots + 30 min buffer
-    const currentTime = new Date();
-    currentTime.setMinutes(currentTime.getMinutes() + 30);
-
-    return timeSlots.filter(slot => {
-      const slotTime = new Date(formData.date + " " + slot);
-      return slotTime >= currentTime;
+    return timeSlots.filter((slot) => {
+      const parsed = new Date(`${formData.date} ${slot}`);
+      return parsed >= buffer;
     });
   };
 
-  // -------------------------------
-  // Submit
-  // -------------------------------
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus('');
+    setSubmitting(true);
+    setStatus({ type: "", message: "" });
 
     try {
-      const res = await fetch(`${backendApi}/schedule`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+      await postScheduleMeeting(formData);
+      setStatus({
+        type: "success",
+        message: "Meeting confirmed! A calendar invite & Zoom link have been sent to your email."
       });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed");
-
-      alert('Meeting scheduled successfully!');
-
-      setFormData({
-        name: '',
-        email: '',
-        date: '',
-        time: '',
-        timezone: 'Asia/Kolkata',
-        purpose: '',
-        message: ''
-      });
-
-      setBookedSlots(prev => [...prev, formData.time]);
-
-      setSubmitStatus('success');
-      onClose();
+      setBookedSlots((prev) => [...prev, formData.time]);
+      setTimeout(() => {
+        onClose();
+        setStatus({ type: "", message: "" });
+        setFormData({
+          name: "",
+          email: "",
+          date: "",
+          time: "",
+          timezone: "Asia/Kolkata",
+          purpose: purposes[0],
+          message: ""
+        });
+      }, 3500);
     } catch (err) {
-      console.error(err);
-      alert(err.message);
-      setSubmitStatus('error');
+      const errMessage = err.response?.data?.error || "Failed to schedule meeting. Please try another slot or email directly.";
+      setStatus({ type: "error", message: errMessage });
     } finally {
-      setIsSubmitting(false);
+      setSubmitting(false);
     }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Schedule a Call</h2>
-          <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-            <i className="ri-close-line text-xl text-gray-600 dark:text-gray-400"></i>
-          </button>
-        </div>
-
-        {/* Success */}
-        {submitStatus === 'success' && (
-          <div className="mb-6 p-4 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 rounded-lg">
-            <i className="ri-check-circle-line text-xl mr-2"></i>
-            Meeting scheduled successfully! Check your email for confirmation.
-          </div>
-        )}
-
-        {/* Error */}
-        {submitStatus === 'error' && (
-          <div className="mb-6 p-4 bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200 rounded-lg">
-            <i className="ri-error-warning-line text-xl mr-2"></i>
-            Error scheduling meeting. Please try again.
-          </div>
-        )}
-
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-
-          {/* Name + Email */}
-          <div className="grid sm:grid-cols-2 gap-6">
+    <AnimatePresence>
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 15 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 15 }}
+          transition={{ duration: 0.25 }}
+          onClick={(e) => e.stopPropagation()}
+          className="relative max-w-xl w-full bg-panel border border-line rounded-xl shadow-2xl p-6 md:p-8 my-8"
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between pb-4 border-b border-line mb-6">
             <div>
-              <label className="block mb-2 text-sm font-medium">Full Name *</label>
-              <input
-                type="text"
-                name="name"
-                required
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder="Your Full Name"
-                className="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 text-sm"
-              />
+              <div className="flex items-center gap-2 text-xs font-mono text-cyan">
+                <span className="w-2 h-2 rounded-full bg-cyan animate-pulse" />
+                scheduler.init()
+              </div>
+              <h3 className="font-display text-2xl font-semibold text-paper mt-1">
+                Schedule a 1-on-1 Call
+              </h3>
             </div>
-
-            <div>
-              <label className="block mb-2 text-sm font-medium">Email *</label>
-              <input
-                type="email"
-                name="email"
-                required
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="you@example.com"
-                className="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 text-sm"
-              />
-            </div>
-          </div>
-
-          {/* Date + Time */}
-          <div className="grid sm:grid-cols-2 gap-6">
-            <div>
-              <label className="block mb-2 text-sm font-medium">Preferred Date *</label>
-              <input
-                type="date"
-                name="date"
-                required
-                value={formData.date}
-                min={getMinDate()}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 text-sm"
-              />
-            </div>
-
-            <div>
-              <label className="block mb-2 text-sm font-medium">Preferred Time *</label>
-              <select
-                name="time"
-                required
-                value={formData.time}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 cursor-pointer text-sm"
-              >
-                <option value="">Select Time</option>
-
-                {getFilteredSlots().map(slot => (
-                  <option key={slot} value={slot} disabled={bookedSlots.includes(slot)}>
-                    {slot} {bookedSlots.includes(slot) ? "(Booked)" : ""}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Timezone + Purpose */}
-          <div className="grid sm:grid-cols-2 gap-6">
-            <div>
-              <label className="block mb-2 text-sm font-medium">Timezone *</label>
-              <select
-                name="timezone"
-                value={formData.timezone}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 cursor-pointer text-sm"
-              >
-                {timezones.map(tz => (
-                  <option key={tz} value={tz}>{tz.replace(/_/g, ' ')}</option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block mb-2 text-sm font-medium">Meeting Purpose *</label>
-              <select
-                name="purpose"
-                required
-                value={formData.purpose}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 cursor-pointer text-sm"
-              >
-                <option value="">Select Purpose</option>
-                {purposes.map(p => (
-                  <option key={p} value={p}>{p}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Message */}
-          <div>
-            <label className="block mb-2 text-sm font-medium">Additional Message</label>
-            <textarea
-              name="message"
-              rows={4}
-              maxLength={500}
-              value={formData.message}
-              onChange={handleInputChange}
-              placeholder="Tell me more about your project..."
-              className="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 resize-none text-sm"
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              {formData.message.length}/500 characters
-            </p>
-          </div>
-
-          {/* Buttons */}
-          <div className="flex space-x-4">
             <button
-              type="button"
               onClick={onClose}
-              disabled={isSubmitting}
-              className="flex-1 py-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+              className="w-8 h-8 rounded-md border border-line text-muted hover:text-paper hover:border-cyan flex items-center justify-center transition-colors"
             >
-              Cancel
-            </button>
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 flex items-center justify-center space-x-2"
-            >
-              {isSubmitting ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <span>Scheduling...</span>
-                </>
-              ) : (
-                <>
-                  <i className="ri-calendar-check-line"></i>
-                  <span>Schedule Meeting</span>
-                </>
-              )}
+              <FiX size={18} />
             </button>
           </div>
 
-        </form>
+          {status.type === "success" && (
+            <div className="mb-6 p-4 rounded-lg bg-cyan/10 border border-cyan/30 text-cyan text-sm flex items-start gap-3">
+              <FiCheckCircle size={20} className="shrink-0 mt-0.5" />
+              <span>{status.message}</span>
+            </div>
+          )}
+
+          {status.type === "error" && (
+            <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-start gap-3">
+              <FiAlertCircle size={20} className="shrink-0 mt-0.5" />
+              <span>{status.message}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4 font-body">
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-mono text-muted mb-1.5">Full Name *</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  placeholder="Your Name"
+                  className="input"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-mono text-muted mb-1.5">Email *</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  placeholder="you@example.com"
+                  className="input"
+                />
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-mono text-muted mb-1.5">Preferred Date *</label>
+                <div className="relative">
+                  <input
+                    type="date"
+                    name="date"
+                    min={todayStr}
+                    value={formData.date}
+                    onChange={handleChange}
+                    required
+                    className="input"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-mono text-muted mb-1.5">
+                  Preferred Time Slot * {loadingSlots && "(Checking...)"}
+                </label>
+                <select
+                  name="time"
+                  value={formData.time}
+                  onChange={handleChange}
+                  required
+                  className="input"
+                >
+                  <option value="">Select a slot</option>
+                  {getFilteredSlots().map((slot) => {
+                    const isBooked = bookedSlots.includes(slot);
+                    return (
+                      <option key={slot} value={slot} disabled={isBooked}>
+                        {slot} {isBooked ? "— (Booked)" : ""}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-mono text-muted mb-1.5">Your Timezone</label>
+                <select
+                  name="timezone"
+                  value={formData.timezone}
+                  onChange={handleChange}
+                  className="input"
+                >
+                  {timezones.map((tz) => (
+                    <option key={tz} value={tz}>
+                      {tz.replace(/_/g, " ")}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-mono text-muted mb-1.5">Meeting Purpose *</label>
+                <select
+                  name="purpose"
+                  value={formData.purpose}
+                  onChange={handleChange}
+                  required
+                  className="input"
+                >
+                  {purposes.map((p) => (
+                    <option key={p} value={p}>
+                      {p}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-mono text-muted mb-1.5">Additional Project Notes</label>
+              <textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                maxLength={400}
+                rows={3}
+                placeholder="Give a quick summary of what you'd like to talk about..."
+                className="input resize-none"
+              />
+            </div>
+
+            <div className="pt-2 flex items-center justify-end gap-3">
+              <button
+                type="button"
+                onClick={onClose}
+                disabled={submitting}
+                className="border border-line text-muted hover:text-paper px-4 py-2.5 rounded-md font-mono text-sm transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="inline-flex items-center gap-2 bg-amber text-ink font-display font-semibold px-5 py-2.5 rounded-md hover:bg-amber-dim transition-colors disabled:opacity-60 text-sm"
+              >
+                {submitting ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-ink border-t-transparent rounded-full animate-spin" />
+                    Booking Slot...
+                  </>
+                ) : (
+                  <>
+                    <FiCalendar /> Confirm Schedule
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        </motion.div>
       </div>
-    </div>
+    </AnimatePresence>
   );
 }

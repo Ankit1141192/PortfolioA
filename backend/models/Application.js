@@ -1,65 +1,65 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const applicationSchema = new mongoose.Schema({
   companyName: {
     type: String,
     required: false,
-    trim: true
+    trim: true,
   },
   source: {
     type: String,
     required: false,
-    trim: true
+    trim: true,
   },
   jobUrl: {
     type: String,
-    trim: true
+    trim: true,
   },
   hrEmail: {
     type: String,
     required: false,
     lowercase: true,
-    trim: true
+    trim: true,
   },
   hrPhone: {
     type: String,
     required: false,
-    trim: true
+    trim: true,
   },
   applicantEmail: {
     type: String,
     required: false,
     lowercase: true,
-    trim: true
+    trim: true,
   },
   position: {
     type: String,
-    required: true
+    required: true,
   },
   message: {
     type: String,
-    required: true
+    required: true,
   },
   resumeName: {
-    type: String
+    type: String,
   },
   resumeUrl: {
-    type: String
+    type: String,
   },
   applicationType: {
     type: String,
-    default: 'Email' // 'Email' | 'WhatsApp'
+    default: "Email", // 'Email' | 'WhatsApp'
   },
   status: {
     type: String,
-    default: 'Applied'
+    default: "Applied",
   },
   appliedDate: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
-const Application = mongoose.model('Application', applicationSchema);
+const Application = mongoose.model("Application", applicationSchema);
 
-module.exports = Application;
+export default Application;

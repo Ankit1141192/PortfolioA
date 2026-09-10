@@ -40,3 +40,13 @@ export async function postJobApplication(formData) {
   });
   return data;
 }
+
+export async function updateApplicationStatus(id, status) {
+  const { data } = await api.patch(`/applications/${id}/status`, { status });
+  return data;
+}
+
+export async function deleteApplication(id) {
+  const { data } = await api.delete(`/applications/${id}`);
+  return data;
+}

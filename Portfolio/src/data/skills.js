@@ -18,6 +18,7 @@ export const skillGroups = [
       { name: "MongoDB", level: 83 },
       { name: "Firebase", level: 80 },
       { name: "REST APIs / JWT", level: 85 },
+      { name: "Python", level: 50 },
     ],
   },
   {

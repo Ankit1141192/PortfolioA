@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiMenu, HiX } from "react-icons/hi";
+import { FiBriefcase } from "react-icons/fi";
+import { useNavigate, useLocation } from "../lib/router";
 
 const tabs = [
-  { id: "about", label: "about" },
-  { id: "skills", label: "skills" },
-  { id: "services", label: "services" },
-  { id: "projects", label: "projects" },
-  { id: "feedback", label: "feedback" },
-  { id: "contact", label: "contact" },
+  { id: "about", label: "about", path: "/about" },
+  { id: "skills", label: "skills", path: "/skills" },
+  { id: "services", label: "services", path: "/services" },
+  { id: "projects", label: "projects", path: "/projects" },
+  { id: "feedback", label: "feedback", path: "/feedback" },
+  { id: "contact", label: "contact", path: "/contact" },
+ 
 ];
 
 export default function Navbar() {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("about");
@@ -24,7 +29,28 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const sections = tabs.map((t) => document.getElementById(t.id)).filter(Boolean);
+    const isPortal =
+      pathname.toLowerCase().includes("appliedjob") ||
+      pathname.toLowerCase().includes("applyportal");
+
+    if (isPortal) {
+      setActive("appliedJob");
+      return;
+    }
+
+    const pathNormalized = pathname.replace(/^\//, "").toLowerCase();
+    if (pathNormalized && tabs.some((t) => t.id.toLowerCase() === pathNormalized)) {
+      setActive(pathNormalized);
+      return;
+    }
+
+    const sections = tabs
+      .filter((t) => !t.isPortal)
+      .map((t) => document.getElementById(t.id))
+      .filter(Boolean);
+
+    if (sections.length === 0) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -33,13 +59,45 @@ export default function Navbar() {
       },
       { rootMargin: "-40% 0px -50% 0px" }
     );
+
     sections.forEach((s) => observer.observe(s));
     return () => observer.disconnect();
-  }, []);
+  }, [pathname]);
 
-  const go = (id) => {
+  const go = (id, path = `/${id}`) => {
     setOpen(false);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    const isPortalTarget = id === "appliedJob" || path === "/appliedJob";
+    const isCurrentlyOnPortal =
+      pathname.toLowerCase().includes("appliedjob") ||
+      pathname.toLowerCase().includes("applyportal");
+
+    if (isPortalTarget) {
+      setActive("appliedJob");
+      navigate("/appliedJob");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    if (isCurrentlyOnPortal) {
+      // Navigate back to home first, then scroll to section
+      navigate(id === "hero" ? "/" : path);
+      setTimeout(() => {
+        if (id === "hero") {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+          document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 120);
+      return;
+    }
+
+    // Already on home page
+    navigate(id === "hero" ? "/" : path);
+    if (id === "hero") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
@@ -50,7 +108,7 @@ export default function Navbar() {
     >
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <button
-          onClick={() => go("hero")}
+          onClick={() => go("hero", "/")}
           className="font-display font-semibold text-paper text-lg tracking-tight flex items-center gap-2"
         >
           <span className="text-cyan font-mono text-sm">&lt;</span>
@@ -62,12 +120,18 @@ export default function Navbar() {
           {tabs.map((t) => (
             <button
               key={t.id}
-              onClick={() => go(t.id)}
-              className={`relative px-3 py-1.5 rounded-t-md tab-notch transition-colors ${
+              onClick={() => go(t.id, t.path)}
+              className={`relative px-3 py-1.5 rounded-t-md tab-notch transition-colors flex items-center gap-1.5 ${
                 active === t.id ? "text-paper bg-panel" : "text-muted hover:text-paper"
-              }`}
+              } ${t.isPortal ? "text-cyan/90 hover:text-cyan" : ""}`}
             >
+              {t.isPortal && <FiBriefcase size={12} className="text-cyan" />}
               {t.label}
+              {t.isPortal && (
+                <span className="text-[10px] px-1.5 py-0.5 rounded font-mono bg-cyan/15 text-cyan border border-cyan/30">
+                  Portal
+                </span>
+              )}
               {active === t.id && (
                 <motion.span
                   layoutId="navUnderline"
@@ -78,14 +142,20 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <button
-          onClick={() => go("contact")}
-          className="hidden md:inline-flex items-center gap-2 bg-amber text-ink font-display font-semibold text-sm px-4 py-2 rounded-md hover:bg-amber-dim transition-colors"
-        >
-          Hire me
-        </button>
+        <div className="hidden md:flex items-center gap-3">
+          <button
+            onClick={() => go("contact", "/contact")}
+            className="inline-flex items-center gap-2 bg-amber text-ink font-display font-semibold text-sm px-4 py-2 rounded-md hover:bg-amber-dim transition-colors"
+          >
+            Hire me
+          </button>
+        </div>
 
-        <button className="md:hidden text-paper text-2xl" onClick={() => setOpen((o) => !o)}>
+        <button
+          className="md:hidden text-paper text-2xl"
+          onClick={() => setOpen((o) => !o)}
+          aria-label="Toggle menu"
+        >
           {open ? <HiX /> : <HiMenu />}
         </button>
       </div>
@@ -102,14 +172,24 @@ export default function Navbar() {
               {tabs.map((t) => (
                 <button
                   key={t.id}
-                  onClick={() => go(t.id)}
-                  className={`text-left py-2 ${active === t.id ? "text-amber" : "text-muted"}`}
+                  onClick={() => go(t.id, t.path)}
+                  className={`text-left py-2 flex items-center justify-between ${
+                    active === t.id ? "text-amber font-semibold" : "text-muted"
+                  }`}
                 >
-                  {t.label}
+                  <span className="flex items-center gap-2">
+                    {t.isPortal && <FiBriefcase size={13} className="text-cyan" />}
+                    {t.label}
+                  </span>
+                  {t.isPortal && (
+                    <span className="text-[10px] px-2 py-0.5 rounded font-mono bg-cyan/15 text-cyan border border-cyan/30">
+                      Portal
+                    </span>
+                  )}
                 </button>
               ))}
               <button
-                onClick={() => go("contact")}
+                onClick={() => go("contact", "/contact")}
                 className="mt-2 bg-amber text-ink font-display font-semibold px-4 py-2 rounded-md text-center"
               >
                 Hire me

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { FiGithub, FiLinkedin, FiTwitter, FiInstagram, FiArrowDown, FiDownload } from "react-icons/fi";
 import { useTypewriter } from "../lib/useTypewriter";
+import { useNavigate } from "../lib/router";
 
 const roles = ["Mobile App Developer", "Full-Stack MERN Developer", "Freelance Web Developer"];
 
@@ -21,7 +22,13 @@ const socials = [
 ];
 
 export default function Hero() {
+  const navigate = useNavigate();
   const typed = useTypewriter(roles);
+
+  const scrollTo = (id, path) => {
+    navigate(path);
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <section
@@ -75,7 +82,7 @@ export default function Hero() {
               href="#projects"
               onClick={(e) => {
                 e.preventDefault();
-                document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
+                scrollTo("projects", "/projects");
               }}
               className="bg-amber text-ink font-display font-semibold px-5 py-3 rounded-md hover:bg-amber-dim transition-colors"
             >
@@ -85,7 +92,7 @@ export default function Hero() {
               href="#contact"
               onClick={(e) => {
                 e.preventDefault();
-                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+                scrollTo("contact", "/contact");
               }}
               className="border border-line text-paper font-display font-semibold px-5 py-3 rounded-md hover:border-cyan hover:text-cyan transition-colors"
             >
@@ -146,7 +153,7 @@ export default function Hero() {
           </div>
 
           <div className="grid grid-cols-4 gap-3 mt-4">
-            {["10+", "1+", "3+", "5+"].map((stat, i) => (
+            {["15+", "6+", "3+", "5+"].map((stat, i) => (
               <motion.div
                 key={stat}
                 initial={{ opacity: 0, y: 12 }}
@@ -156,7 +163,7 @@ export default function Hero() {
               >
                 <div className="font-display text-xl font-semibold text-amber">{stat}</div>
                 <div className="text-[10px] text-muted mt-0.5">
-                  {["Projects", "Yr exp.", "Hackathons", "Stacks"][i]}
+                  {["Projects", "months exp.", "Hackathons", "Stacks"][i]}
                 </div>
               </motion.div>
             ))}
@@ -168,7 +175,7 @@ export default function Hero() {
         href="#about"
         onClick={(e) => {
           e.preventDefault();
-          document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
+          scrollTo("about", "/about");
         }}
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}

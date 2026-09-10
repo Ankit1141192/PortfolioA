@@ -50,6 +50,7 @@ export const chatbotKnowledge = {
       "RESTful APIs",
       "JWT Authentication",
       "Socket.io",
+      "Python",
     ],
     tooling: [
       "Git & GitHub",

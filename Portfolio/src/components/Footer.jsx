@@ -6,6 +6,7 @@ import {
   FiInstagram,
   FiArrowUp,
 } from "react-icons/fi";
+import { Link } from "../lib/router";
 
 const socials = [
   {
@@ -50,9 +51,13 @@ export default function Footer() {
             <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
               <span className="w-2 h-2 rounded-full bg-cyan animate-pulse" />
 
-              <span className="text-sm font-mono text-paper">
-                Available for opportunities
-              </span>
+              <Link
+                to="/appliedJob"
+                className="text-sm font-mono text-paper hover:text-cyan transition-colors"
+                title="Open Apply Portal"
+              >
+                Available for opportunities &rarr;
+              </Link>
             </div>
 
             <p className="text-muted text-sm">

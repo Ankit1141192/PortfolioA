@@ -3,18 +3,35 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+let _transporter = null;
 
-transporter.verify((err) => {
-  if (err) {
-    console.log("Nodemailer SMTP Notice:", err.message);
-  } else {
-    console.log("Nodemailer SMTP Connected Successfully");
+export function getTransporter() {
+  if (!_transporter) {
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.warn("EMAIL_USER or EMAIL_PASS not set. Emails will not be sent.");
+    }
+    _transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
   }
-});
+  return _transporter;
+}
+
+// Lazy proxy so transporter is only instantiated inside a request handler (not in global scope)
+export const transporter = new Proxy(
+  {},
+  {
+    get(target, prop) {
+      const instance = getTransporter();
+      const val = instance[prop];
+      if (typeof val === "function") {
+        return val.bind(instance);
+      }
+      return val;
+    },
+  }
+);

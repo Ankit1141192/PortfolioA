@@ -1,8 +1,11 @@
 {
-  "name": "ankit-portfolio-backend",
+  "name": "portfolio-backend",
   "main": "backend/worker.js",
   "compatibility_date": "2026-08-04",
   "compatibility_flags": [
     "nodejs_compat"
-  ]
+  ],
+  "alias": {
+    "iconv-lite": "./backend/shims/iconv-lite.js"
+  }
 }

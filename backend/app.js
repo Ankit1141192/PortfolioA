@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import path from "path";
 import fs from "fs";
 import os from "os";
-import { fileURLToPath } from "url";
 import rateLimit from "express-rate-limit";
 import { connectDB } from "./config/db.js";
 import testimonialRoutes from "./routes/testimonials.js";
@@ -13,9 +12,6 @@ import scheduleRoutes from "./routes/schedule.js";
 import applicationRoutes from "./routes/applications.js";
 
 dotenv.config();
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export const app = express();
 

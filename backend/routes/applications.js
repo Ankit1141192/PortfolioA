@@ -2,13 +2,9 @@ import express from "express";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-import { fileURLToPath } from "url";
 import os from "os";
 import Application from "../models/Application.js";
 import { transporter } from "../config/mail.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 

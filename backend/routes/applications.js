@@ -3,6 +3,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import os from "os";
 import Application from "../models/Application.js";
 import { transporter } from "../config/mail.js";
 
@@ -11,10 +12,14 @@ const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
-// Ensure uploads folder exists
-const uploadsDir = path.join(__dirname, "..", "uploads");
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
+// Ensure uploads folder exists (with safe fallback for serverless/edge environments)
+const uploadsDir = process.env.UPLOADS_DIR || path.join(os.tmpdir(), "uploads");
+try {
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
+} catch (e) {
+  // Ignored in environments where filesystem is read-only
 }
 
 // Multer memory storage
@@ -59,12 +64,14 @@ router.post("/send-email", upload.single("resume"), async (req, res) => {
     if (resume) {
       const fileExt = path.extname(resume.originalname);
       const uniqueFilename = `resume-${Date.now()}-${Math.round(Math.random() * 1e9)}${fileExt}`;
-      const filePath = path.join(uploadsDir, uniqueFilename);
-
-      fs.writeFileSync(filePath, resume.buffer);
-
-      const serverUrl = `${req.protocol}://${req.get("host")}`;
-      resumeUrl = `${serverUrl}/uploads/${uniqueFilename}`;
+      try {
+        const filePath = path.join(uploadsDir, uniqueFilename);
+        fs.writeFileSync(filePath, resume.buffer);
+        const serverUrl = `${req.protocol}://${req.get("host")}`;
+        resumeUrl = `${serverUrl}/uploads/${uniqueFilename}`;
+      } catch (writeErr) {
+        console.warn("Could not write resume to disk:", writeErr.message);
+      }
       resumeName = resume.originalname;
     }
 
